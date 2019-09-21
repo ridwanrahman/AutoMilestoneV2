@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using AutoMilestoneV2.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using AutoMilestoneV2.Controllers;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace AutoMilestoneV2.Controllers.Admin
 {
@@ -19,6 +21,38 @@ namespace AutoMilestoneV2.Controllers.Admin
             
             
             return View();
+        }
+
+        public ActionResult AddStaff()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddStaff(RegisterViewModel newModel)
+        {
+            var userStore = new UserStore<IdentityUser>();
+            var manager = new UserManager<IdentityUser>(userStore);
+
+            var user = new IdentityUser() { Email = newModel.Email, UserName=newModel.Email };
+            IdentityResult result = manager.Create(user, newModel.Password);
+            try
+            {
+                using (Entities2 db = new Entities2())
+                {
+                    db.Database.ExecuteSqlCommand("insert into [dbo].[AspNetUserRoles]([UserId], [RoleId]) values ('" + user.Id + "',2);");
+                }
+                ViewBag.Message = "success";
+                return View();
+            }
+            catch
+            {
+                ViewBag.Message = "error";
+                return View();
+
+            }
+            
+            
         }
     }
 }

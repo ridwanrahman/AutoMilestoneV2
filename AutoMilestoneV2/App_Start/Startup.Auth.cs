@@ -58,11 +58,11 @@ namespace AutoMilestoneV2
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+           app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+           {
+               ClientId = "951852478799-e7u1bs9ahn9goqqrqlgrf34hhm412fsu.apps.googleusercontent.com",
+               ClientSecret = "5X-M8Rhf26CD-wjN1M4bMegW"
+           });
         }
     }
 }

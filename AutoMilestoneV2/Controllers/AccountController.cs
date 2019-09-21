@@ -101,7 +101,8 @@ namespace AutoMilestoneV2.Controllers
                     {
                         return RedirectToAction("Index", "Admin");
                     }
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Customer");
+                    //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -162,6 +163,13 @@ namespace AutoMilestoneV2.Controllers
         public ActionResult Register()
         {
             return View();
+        }
+
+        public async Task<string> Register2(RegisterViewModel model)
+        {
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var result = await UserManager.CreateAsync(user, model.Password);
+            return "done";
         }
 
         //
