@@ -35,7 +35,7 @@ namespace AutoMilestoneV2.Controllers.Staff
             string userId = User.Identity.GetUserId();
             try
             {
-                using(Entities2 db = new Entities2())
+                using(Entities3 db = new Entities3())
                 {
                     db.Database.ExecuteSqlCommand("insert into [dbo].[Vehicle] ([Name],[Model],[userId],[image_path]) Values ('"+newUpload.name+"', '"+newUpload.model+"', '"+userId+"', '"+ fullPath + "');");
                 }
@@ -52,6 +52,14 @@ namespace AutoMilestoneV2.Controllers.Staff
 
         public ActionResult ViewOrders()
         {
+            return View();
+        }
+
+        public ActionResult ViewFleet()
+        {
+            Entities3 db = new Entities3();
+            ViewBag.first = db.AspNetUsers.ToList();
+            ViewBag.ItemData = db.Vehicles.ToList();
             return View();
         }
     }

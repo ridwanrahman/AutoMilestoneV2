@@ -18,6 +18,7 @@ namespace AutoMilestoneV2.Models
         public string Name { get; set; }
         public string Model { get; set; }
         public string userId { get; set; }
+        public string image_path { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
     }

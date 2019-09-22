@@ -20,7 +20,8 @@ namespace AutoMilestoneV2.Models
             this.AspNetUserClaims = new HashSet<AspNetUserClaim>();
             this.AspNetUserLogins = new HashSet<AspNetUserLogin>();
             this.Vehicles = new HashSet<Vehicle>();
-            this.AspNetUserRoles = new HashSet<AspNetUserRole>();
+            this.AspNetRoles = new HashSet<AspNetRole>();
+            this.userrolesbridgings = new HashSet<userrolesbridging>();
         }
     
         public string Id { get; set; }
@@ -43,6 +44,8 @@ namespace AutoMilestoneV2.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Vehicle> Vehicles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; }
+        public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<userrolesbridging> userrolesbridgings { get; set; }
     }
 }

@@ -38,9 +38,9 @@ namespace AutoMilestoneV2.Controllers.Admin
             IdentityResult result = manager.Create(user, newModel.Password);
             try
             {
-                using (Entities2 db = new Entities2())
+                using (Entities3 db = new Entities3())
                 {
-                    db.Database.ExecuteSqlCommand("insert into [dbo].[AspNetUserRoles]([UserId], [RoleId]) values ('" + user.Id + "',2);");
+                    db.Database.ExecuteSqlCommand("insert into [dbo].[userrolesbridging]([UserId], [RoleId]) values ('" + user.Id + "',2);");
                 }
                 ViewBag.Message = "success";
                 return View();

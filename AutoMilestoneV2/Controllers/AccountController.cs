@@ -65,9 +65,9 @@ namespace AutoMilestoneV2.Controllers
         // checking the email with the userroles from the database
         public String[] roleChecker(string email)
         {            
-            using(var context = new Entities2())
+            using(var context = new Entities3())
             {
-                var result = (from u in context.AspNetUsers join ur in context.AspNetUserRoles
+                var result = (from u in context.AspNetUsers join ur in context.userrolesbridgings
                               on u.Id equals ur.UserId join ro in context.AspNetRoles on 
                               ur.RoleId equals ro.Id where u.Email==email
                               select ro.Name).ToArray();
@@ -195,9 +195,9 @@ namespace AutoMilestoneV2.Controllers
                     if (model.isStaff == "false")
                     {
                         string userId = user.Id;
-                        using(Entities2 db = new Entities2())
+                        using(Entities3 db = new Entities3())
                         {
-                            db.Database.ExecuteSqlCommand("insert into [dbo].[AspNetUserRoles]([UserId], [RoleId]) values ('"+user.Id+"',3);");
+                            db.Database.ExecuteSqlCommand("insert into [dbo].[userrolesbridging]([UserId], [RoleId]) values ('"+user.Id+"',3);");
                         }
                     }
 

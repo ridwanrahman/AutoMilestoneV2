@@ -182,40 +182,40 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AspNetRole.cs">
-      <DependentUpon>AutoMilestoneV2DB.tt</DependentUpon>
+      <DependentUpon>AutoMilestoneModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AspNetUser.cs">
-      <DependentUpon>AutoMilestoneV2DB.tt</DependentUpon>
+      <DependentUpon>AutoMilestoneModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AspNetUserClaim.cs">
-      <DependentUpon>AutoMilestoneV2DB.tt</DependentUpon>
+      <DependentUpon>AutoMilestoneModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AspNetUserLogin.cs">
-      <DependentUpon>AutoMilestoneV2DB.tt</DependentUpon>
+      <DependentUpon>AutoMilestoneModelDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AspNetUserRole.cs">
-      <DependentUpon>AutoMilestoneV2DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AutoMilestoneV2DB.Context.cs">
+    <Compile Include="Models\AutoMilestoneModelDB.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AutoMilestoneV2DB.Context.tt</DependentUpon>
+      <DependentUpon>AutoMilestoneModelDB.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AutoMilestoneV2DB.cs">
+    <Compile Include="Models\AutoMilestoneModelDB.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AutoMilestoneV2DB.tt</DependentUpon>
+      <DependentUpon>AutoMilestoneModelDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AutoMilestoneV2DB.Designer.cs">
+    <Compile Include="Models\AutoMilestoneModelDB.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AutoMilestoneV2DB.edmx</DependentUpon>
+      <DependentUpon>AutoMilestoneModelDB.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\StaffCarUploadModel.cs" />
+    <Compile Include="Models\userrolesbridging.cs">
+      <DependentUpon>AutoMilestoneModelDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Vehicle.cs">
-      <DependentUpon>AutoMilestoneV2DB.tt</DependentUpon>
+      <DependentUpon>AutoMilestoneModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -237,24 +237,17 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\AutoMilestoneV2DB.Context.tt">
+    <Content Include="Models\AutoMilestoneModelDB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AutoMilestoneV2DB.edmx</DependentUpon>
-      <LastGenOutput>AutoMilestoneV2DB.Context.cs</LastGenOutput>
+      <DependentUpon>AutoMilestoneModelDB.edmx</DependentUpon>
+      <LastGenOutput>AutoMilestoneModelDB.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\AutoMilestoneModelDB.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AutoMilestoneModelDB.edmx</DependentUpon>
+      <LastGenOutput>AutoMilestoneModelDB.cs</LastGenOutput>
     </Content>
     <Content Include="Models\AutoMilestoneV2DB.edmx.sql" />
-    <Content Include="Models\AutoMilestoneV2DB.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AutoMilestoneV2DB.edmx</DependentUpon>
-      <LastGenOutput>AutoMilestoneV2DB.cs</LastGenOutput>
-    </Content>
-    <EntityDeploy Include="Models\AutoMilestoneV2DB.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AutoMilestoneV2DB.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\AutoMilestoneV2DB.edmx.diagram">
-      <DependentUpon>AutoMilestoneV2DB.edmx</DependentUpon>
-    </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -286,6 +279,13 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <EntityDeploy Include="Models\AutoMilestoneModelDB.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AutoMilestoneModelDB.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\AutoMilestoneModelDB.edmx.diagram">
+      <DependentUpon>AutoMilestoneModelDB.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -357,6 +357,7 @@
     <Content Include="Views\Shared\StaffLayout.cshtml" />
     <Content Include="Views\Staff\AddVehicle.cshtml" />
     <Content Include="Views\Staff\ViewOrders.cshtml" />
+    <Content Include="Views\Staff\ViewFleet.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\File\" />

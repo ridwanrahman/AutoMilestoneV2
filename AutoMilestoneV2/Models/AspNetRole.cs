@@ -17,7 +17,8 @@ namespace AutoMilestoneV2.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetRole()
         {
-            this.AspNetUserRoles = new HashSet<AspNetUserRole>();
+            this.AspNetUsers = new HashSet<AspNetUser>();
+            this.userrolesbridgings = new HashSet<userrolesbridging>();
         }
     
         public string Id { get; set; }
@@ -25,6 +26,8 @@ namespace AutoMilestoneV2.Models
         public string RoleDescription { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; }
+        public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<userrolesbridging> userrolesbridgings { get; set; }
     }
 }
