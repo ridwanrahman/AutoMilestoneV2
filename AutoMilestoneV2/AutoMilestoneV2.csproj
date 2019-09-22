@@ -213,6 +213,7 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\StaffCarUploadModel.cs" />
     <Compile Include="Models\Vehicle.cs">
       <DependentUpon>AutoMilestoneV2DB.tt</DependentUpon>
     </Compile>
@@ -353,8 +354,13 @@
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Staff\Index.cshtml" />
     <Content Include="Views\Admin\AddStaff.cshtml" />
+    <Content Include="Views\Shared\StaffLayout.cshtml" />
+    <Content Include="Views\Staff\AddVehicle.cshtml" />
+    <Content Include="Views\Staff\ViewOrders.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\File\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />

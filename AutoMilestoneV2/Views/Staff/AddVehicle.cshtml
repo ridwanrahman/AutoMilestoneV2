@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "AddVehicle";
+    Layout = "~/Views/Shared/StaffLayout.cshtml";
+}
+@model AutoMilestoneV2.Models.StaffCarUploadModel
+
+<h2>AddVehicle</h2>
+@using (Html.BeginForm("AddVehicle", "Staff", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    <form>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Name</label>
+            
+            <input type="text" class="form-control" name="name" id="name" placeholder="Enter name of vehicle">
+        </div>
+        <div class="form-group">
+            
+            <label for="model">Model</label>
+            <input type="text" class="form-control" name="model" id="model" placeholder="Enter model year">
+        </div>
+        <div class="custom-file">
+            
+            <input type="file" class="custom-file-input" name="carPicture" id="carPicture">
+            <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+        @ViewBag.Message
+    </form>
+
+
+}
+
+
