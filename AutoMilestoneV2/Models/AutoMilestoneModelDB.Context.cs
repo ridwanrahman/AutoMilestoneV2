@@ -29,7 +29,9 @@ namespace AutoMilestoneV2.Models
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-        public virtual DbSet<Vehicle> Vehicles { get; set; }
         public virtual DbSet<userrolesbridging> userrolesbridgings { get; set; }
+        public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<CustomerBooking> CustomerBookings { get; set; }
+        public virtual DbSet<Vehicle> Vehicles { get; set; }
     }
 }

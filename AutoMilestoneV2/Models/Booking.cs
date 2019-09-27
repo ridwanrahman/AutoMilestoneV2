@@ -12,22 +12,21 @@ namespace AutoMilestoneV2.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Vehicle
+    public partial class Booking
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Vehicle()
+        public Booking()
         {
             this.CustomerBookings = new HashSet<CustomerBooking>();
         }
     
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Model { get; set; }
-        public string userId { get; set; }
-        public string image_path { get; set; }
-        public string vehicle_description { get; set; }
+        public int booking_id { get; set; }
+        public string date { get; set; }
+        public string time { get; set; }
+        public string pickup_location { get; set; }
+        public string dropoff_location { get; set; }
+        public string isAccepted { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerBooking> CustomerBookings { get; set; }
     }
