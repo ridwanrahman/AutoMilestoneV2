@@ -15,12 +15,11 @@
         <EntityTypeShape EntityType="Model.userrolesbridging" Width="1.5" PointX="1.625" PointY="0.5" />
         <AssociationConnector Association="Model.FK_dbo_userrolesbridging_dbo_AspNetRoles_RoleId" />
         <AssociationConnector Association="Model.FK_dbo_userrolesbridging_dbo_AspNetUsers_UserId" />
-        <EntityTypeShape EntityType="Model.Booking" Width="1.5" PointX="7.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.CustomerBooking" Width="1.5" PointX="10" PointY="3.5" />
-        <AssociationConnector Association="Model.FK__CustomerB__userI__628FA481" />
-        <AssociationConnector Association="Model.FK__CustomerB__booki__6383C8BA" />
         <EntityTypeShape EntityType="Model.Vehicle" Width="1.5" PointX="7" PointY="6.875" />
         <AssociationConnector Association="Model.FK__Vehicle__userId__398D8EEE" />
+        <EntityTypeShape EntityType="Model.Booking" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.CustomerBooking" Width="1.5" PointX="9.25" PointY="4.625" />
+        <AssociationConnector Association="Model.FK__CustomerB__userI__628FA481" />
         <AssociationConnector Association="Model.FK__CustomerB__vehic__6477ECF3" />
         </Diagram>
     </edmx:Diagrams>

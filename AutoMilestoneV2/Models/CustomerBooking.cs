@@ -16,12 +16,14 @@ namespace AutoMilestoneV2.Models
     {
         public int customer_booking_id { get; set; }
         public string userId { get; set; }
-        public int booking_id { get; set; }
         public int vehicle_id { get; set; }
         public string isAccepted { get; set; }
+        public Nullable<System.DateTime> to_date { get; set; }
+        public Nullable<System.DateTime> from_date { get; set; }
+        public string pickup_location { get; set; }
+        public string dropoff_location { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
-        public virtual Booking Booking { get; set; }
         public virtual Vehicle Vehicle { get; set; }
     }
 }

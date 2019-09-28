@@ -3,230 +3,210 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@Styles.Render("~/Content/CustomerStyleSheet.css")
+<!--<script src='https://api.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.js'></script>-->
+<!--<link href='https://api.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.css' rel='stylesheet' />-->
+
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css' rel='stylesheet' />
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #map {
+        position: relative;
+        top: 200;
+        bottom: 100;
+        width: 100%;
+    }
+
+    .distance-container {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 1;
+    }
+
+        .distance-container > * {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 11px;
+            line-height: 18px;
+            display: block;
+            margin: 0;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+</style>
+
 <div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-            <div class="sidebar-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <span data-feather="home"></span>
-                            Dashboard <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file"></span>
-                            Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="shopping-cart"></span>
-                            Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="users"></span>
-                            Customers
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            Reports
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="layers"></span>
-                            Integrations
-                        </a>
-                    </li>
-                </ul>
-
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Saved reports</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Current month
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Last quarter
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Social engagement
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Year-end sale
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Dashboard</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group mr-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                        <span data-feather="calendar"></span>
-                        This week
-                    </button>
-                </div>
-            </div>
-
-            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-
-            <h2>Section title</h2>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Header</th>
-                            <th>Header</th>
-                            <th>Header</th>
-                            <th>Header</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1,001</td>
-                            <td>Lorem</td>
-                            <td>ipsum</td>
-                            <td>dolor</td>
-                            <td>sit</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>amet</td>
-                            <td>consectetur</td>
-                            <td>adipiscing</td>
-                            <td>elit</td>
-                        </tr>
-                        <tr>
-                            <td>1,003</td>
-                            <td>Integer</td>
-                            <td>nec</td>
-                            <td>odio</td>
-                            <td>Praesent</td>
-                        </tr>
-                        <tr>
-                            <td>1,003</td>
-                            <td>libero</td>
-                            <td>Sed</td>
-                            <td>cursus</td>
-                            <td>ante</td>
-                        </tr>
-                        <tr>
-                            <td>1,004</td>
-                            <td>dapibus</td>
-                            <td>diam</td>
-                            <td>Sed</td>
-                            <td>nisi</td>
-                        </tr>
-                        <tr>
-                            <td>1,005</td>
-                            <td>Nulla</td>
-                            <td>quis</td>
-                            <td>sem</td>
-                            <td>at</td>
-                        </tr>
-                        <tr>
-                            <td>1,006</td>
-                            <td>nibh</td>
-                            <td>elementum</td>
-                            <td>imperdiet</td>
-                            <td>Duis</td>
-                        </tr>
-                        <tr>
-                            <td>1,007</td>
-                            <td>sagittis</td>
-                            <td>ipsum</td>
-                            <td>Praesent</td>
-                            <td>mauris</td>
-                        </tr>
-                        <tr>
-                            <td>1,008</td>
-                            <td>Fusce</td>
-                            <td>nec</td>
-                            <td>tellus</td>
-                            <td>sed</td>
-                        </tr>
-                        <tr>
-                            <td>1,009</td>
-                            <td>augue</td>
-                            <td>semper</td>
-                            <td>porta</td>
-                            <td>Mauris</td>
-                        </tr>
-                        <tr>
-                            <td>1,010</td>
-                            <td>massa</td>
-                            <td>Vestibulum</td>
-                            <td>lacinia</td>
-                            <td>arcu</td>
-                        </tr>
-                        <tr>
-                            <td>1,011</td>
-                            <td>eget</td>
-                            <td>nulla</td>
-                            <td>Class</td>
-                            <td>aptent</td>
-                        </tr>
-                        <tr>
-                            <td>1,012</td>
-                            <td>taciti</td>
-                            <td>sociosqu</td>
-                            <td>ad</td>
-                            <td>litora</td>
-                        </tr>
-                        <tr>
-                            <td>1,013</td>
-                            <td>torquent</td>
-                            <td>per</td>
-                            <td>conubia</td>
-                            <td>nostra</td>
-                        </tr>
-                        <tr>
-                            <td>1,014</td>
-                            <td>per</td>
-                            <td>inceptos</td>
-                            <td>himenaeos</td>
-                            <td>Curabitur</td>
-                        </tr>
-                        <tr>
-                            <td>1,015</td>
-                            <td>sodales</td>
-                            <td>ligula</td>
-                            <td>in</td>
-                            <td>libero</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </main>
+    <br />
+    <br />
+    <br />
+    <div class="jumbotron">
+        <h1>AutoMilestone</h1>
+        <p class="lead">Select from our wide range of cars</p>
+        <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
     </div>
+
+    <div>
+        Available cars
+        <div class="list-group">
+            @foreach (var data in ViewBag.ItemData)
+
+            {
+                <a href="#" id="car_selection" value="@data.Id" class="list-group-item car_selection">@data.Name, @data.vehicle_description</a>
+            }
+        </div>
+        <label for="from">From</label>
+        <input type="text" id="from" name="from" />
+        <label for="to">to</label>
+        <input type="text" id="to" name="to" />
+        FROM LOCATION:
+
+        <div id='map' style='width: 700px; height: 500px;'></div>
+        <div id='distance'></div>
+
+        <p><a href="#" class="btn btn-primary btn-lg">Done</a></p>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+
+    <script>
+
+        $(document).ready(function () {
+            var car_id = 0;
+            var date_from = "";
+            var date_to = "";
+            
+            mapboxgl.accessToken = 'pk.eyJ1Ijoicmlkd2FucmFobWFuIiwiYSI6ImNrMTJjYXd5MjAwbzgzZGxscGM3c3l5dnYifQ.Dus70kgKra8qK4EbZFUR3Q';
+            var map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [144.95, -37.82], // starting position
+                zoom: 11.5 // starting zoom
+            });
+            // Add zoom and rotation controls to the map.
+            map.addControl(new mapboxgl.NavigationControl());
+
+            var distanceContainer = document.getElementById('distance');
+            // GeoJSON object to hold our measurement features
+            var geojson = {
+                "type": "FeatureCollection",
+                "features": []
+            };
+
+            // Used to draw a line between points
+            var linestring = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": []
+                }
+            };
+
+            map.on('load', function () {
+                map.addSource('geojson', {
+                    "type": "geojson",
+                    "data": geojson
+                });
+                // Add styles to the map
+                map.addLayer({
+                    id: 'measure-points',
+                    type: 'circle',
+                    source: 'geojson',
+                    paint: {
+                        'circle-radius': 5,
+                        'circle-color': '#000'
+                    },
+                    filter: ['in', '$type', 'Point']
+                });
+
+                map.addLayer({
+                    id: 'measure-lines',
+                    type: 'line',
+                    source: 'geojson',
+                    layout: {
+                        'line-cap': 'round',
+                        'line-join': 'round'
+                    },
+                    paint: {
+                        'line-color': '#000',
+                        'line-width': 2.5
+                    },
+                    filter: ['in', '$type', 'LineString']
+                });
+
+
+                map.on('click', function (e) {
+                    var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
+                    // Remove the linestring from the group
+                    // So we can redraw it based on the points collection
+                    if (geojson.features.length > 1) geojson.features.pop();
+                    // If a feature was clicked, remove it from the map
+                    if (features.length) {
+                        var id = features[0].properties.id;
+                        geojson.features = geojson.features.filter(function (point) {
+                            return point.properties.id !== id;
+                        });
+                    } else {
+                        var point = {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    e.lngLat.lng,
+                                    e.lngLat.lat
+                                ]
+                            },
+                            "properties": {
+                                "id": String(new Date().getTime())
+                            }
+                        };
+                        geojson.features.push(point);
+                    }
+                    if (geojson.features.length > 1) {
+
+                        linestring.geometry.coordinates = geojson.features.map(function (point) {
+                            return point.geometry.coordinates;
+                        });
+
+                        geojson.features.push(linestring);
+
+                        // Populate the distanceContainer with total distance
+                        var value = document.createElement('pre');
+                        value.textContent = 'Total distance: ' + turf.lineDistance(linestring).toLocaleString() + 'km';
+                        $("#distance").html(value.textContent);
+                    }
+                    map.getSource('geojson').setData(geojson);
+                });
+            });
+
+            map.on('mousemove', function (e) {
+                var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
+                // UI indicator for clicking/hovering a point on the map
+                map.getCanvas().style.cursor = (features.length) ? 'pointer' : 'crosshair';
+            });
+
+
+            $(".car_selection").click(function () {
+                car_id = $(this).attr("value");
+                alert("You have selected car with id " + car_id);
+            });
+            $("#from").datepicker({ format: 'mm/dd/yyyy', startDate: '0d' });
+            $("#date_from").change(function () {
+                var date_from = $(this).val();
+            });
+            $('#to').datepicker({ format: 'mm/dd/yyyy', startDate: '0d' });
+            $("#date_to").change(function () {
+                var date_to = $(this).val();
+            });
+        })
+    </script>
+
 </div>
 
