@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -18,8 +17,6 @@
 
     #map {
         position: relative;
-        top: 200;
-        bottom: 100;
         width: 100%;
     }
 
@@ -62,13 +59,16 @@
             }
         </div>
         <label for="from">From</label>
-        <input type="text" id="from" name="from" />
+        <input type="text" id="date_from" name="from" />
         <label for="to">to</label>
-        <input type="text" id="to" name="to" />
+        <input type="text" id="date_to" name="to" />
         FROM LOCATION:
 
         <div id='map' style='width: 700px; height: 500px;'></div>
         <div id='distance'></div>
+        <div id='info'></div>
+
+        <button id="show_data">show data</button>
 
         <p><a href="#" class="btn btn-primary btn-lg">Done</a></p>
     </div>
@@ -82,6 +82,18 @@
             var car_id = 0;
             var date_from = "";
             var date_to = "";
+            var locations = [];
+            var point = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": []
+                },
+                "properties": {
+                    "id": null
+                }
+            };
+            var response = [];
             
             mapboxgl.accessToken = 'pk.eyJ1Ijoicmlkd2FucmFobWFuIiwiYSI6ImNrMTJjYXd5MjAwbzgzZGxscGM3c3l5dnYifQ.Dus70kgKra8qK4EbZFUR3Q';
             var map = new mapboxgl.Map({
@@ -143,7 +155,8 @@
 
 
                 map.on('click', function (e) {
-                    var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
+                    var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });                    
+                    console.log("herere");
                     // Remove the linestring from the group
                     // So we can redraw it based on the points collection
                     if (geojson.features.length > 1) geojson.features.pop();
@@ -153,8 +166,8 @@
                         geojson.features = geojson.features.filter(function (point) {
                             return point.properties.id !== id;
                         });
-                    } else {
-                        var point = {
+                    } else {                        
+                         point = {
                             "type": "Feature",
                             "geometry": {
                                 "type": "Point",
@@ -167,6 +180,8 @@
                                 "id": String(new Date().getTime())
                             }
                         };
+                        locations.push(point['geometry']['coordinates']);
+                        console.log(locations);
                         geojson.features.push(point);
                     }
                     if (geojson.features.length > 1) {
@@ -174,9 +189,7 @@
                         linestring.geometry.coordinates = geojson.features.map(function (point) {
                             return point.geometry.coordinates;
                         });
-
                         geojson.features.push(linestring);
-
                         // Populate the distanceContainer with total distance
                         var value = document.createElement('pre');
                         value.textContent = 'Total distance: ' + turf.lineDistance(linestring).toLocaleString() + 'km';
@@ -191,22 +204,53 @@
                 // UI indicator for clicking/hovering a point on the map
                 map.getCanvas().style.cursor = (features.length) ? 'pointer' : 'crosshair';
             });
-
+            map.on('mousemove', function (e) {
+                document.getElementById('info').innerHTML =
+                // e.point is the x, y coordinates of the mousemove event relative
+                // to the top-left corner of the map
+                JSON.stringify(e.point) + '<br />' +
+                // e.lngLat is the longitude, latitude geographical position of the event
+                JSON.stringify(e.lngLat.wrap());
+            });
 
             $(".car_selection").click(function () {
                 car_id = $(this).attr("value");
                 alert("You have selected car with id " + car_id);
             });
-            $("#from").datepicker({ format: 'mm/dd/yyyy', startDate: '0d' });
+            $("#date_from").datepicker({ format: 'mm/dd/yyyy', startDate: '0d' });
             $("#date_from").change(function () {
-                var date_from = $(this).val();
+                date_from = $(this).val();
+                console.log(date_from);
             });
-            $('#to').datepicker({ format: 'mm/dd/yyyy', startDate: '0d' });
+            $('#date_to').datepicker({ format: 'mm/dd/yyyy', startDate: '0d' });
             $("#date_to").change(function () {
-                var date_to = $(this).val();
+                date_to = $(this).val();
+                console.log(date_to);
             });
+
+            $("#show_data").click(function () {
+                console.log(locations);
+                console.log("sending data");
+                console.log(date_from);
+                response.push(date_from);
+                console.log(date_to);
+                response.push(date_to);
+                console.log(car_id);
+                response.push(car_id);
+                console.log(response);
+                response.push(locations);
+                $.ajax({
+                    type: "POST",
+                    dataType: 'text',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ sendInfo: JSON.stringify(response) }),
+                    url: "/Customer/CreateBooking",                    
+                    success: function (result) {
+                        console.log("received");
+                    }
+                })
+            })
         })
     </script>
-
 </div>
 

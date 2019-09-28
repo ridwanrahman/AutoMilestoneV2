@@ -81,6 +81,15 @@
           <Property Name="pickup_location" Type="nvarchar(max)" />
           <Property Name="dropoff_location" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="CustomerBookingLocation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customer_booking_id" Type="int" Nullable="false" />
+          <Property Name="latitude" Type="numeric" Precision="10" Scale="8" Nullable="false" />
+          <Property Name="longitude" Type="numeric" Precision="11" Scale="8" Nullable="false" />
+        </EntityType>
         <EntityType Name="userrolesbridging">
           <Key>
             <PropertyRef Name="UserId" />
@@ -101,6 +110,18 @@
           <Property Name="image_path" Type="varchar" MaxLength="255" />
           <Property Name="vehicle_description" Type="nvarchar(max)" />
         </EntityType>
+        <Association Name="FK__CustomerB__custo__04E4BC85">
+          <End Role="CustomerBooking" Type="Self.CustomerBooking" Multiplicity="1" />
+          <End Role="CustomerBookingLocation" Type="Self.CustomerBookingLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerBooking">
+              <PropertyRef Name="customer_booking_id" />
+            </Principal>
+            <Dependent Role="CustomerBookingLocation">
+              <PropertyRef Name="customer_booking_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__CustomerB__userI__628FA481">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="CustomerBooking" Type="Self.CustomerBooking" Multiplicity="*" />
@@ -229,8 +250,13 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerBooking" EntityType="Self.CustomerBooking" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerBookingLocation" EntityType="Self.CustomerBookingLocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="userrolesbridging" EntityType="Self.userrolesbridging" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vehicle" EntityType="Self.Vehicle" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__CustomerB__custo__04E4BC85" Association="Self.FK__CustomerB__custo__04E4BC85">
+            <End Role="CustomerBooking" EntitySet="CustomerBooking" />
+            <End Role="CustomerBookingLocation" EntitySet="CustomerBookingLocation" />
+          </AssociationSet>
           <AssociationSet Name="FK__CustomerB__userI__628FA481" Association="Self.FK__CustomerB__userI__628FA481">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="CustomerBooking" EntitySet="CustomerBooking" />
@@ -399,6 +425,11 @@
             <End Role="Vehicle" EntitySet="Vehicles" />
             <End Role="CustomerBooking" EntitySet="CustomerBookings" />
           </AssociationSet>
+          <EntitySet Name="CustomerBookingLocations" EntityType="Model.CustomerBookingLocation" />
+          <AssociationSet Name="FK__CustomerB__custo__04E4BC85" Association="Model.FK__CustomerB__custo__04E4BC85">
+            <End Role="CustomerBooking" EntitySet="CustomerBookings" />
+            <End Role="CustomerBookingLocation" EntitySet="CustomerBookingLocations" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="userrolesbridging">
           <Key>
@@ -489,6 +520,7 @@
           <Property Name="dropoff_location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK__CustomerB__userI__628FA481" FromRole="CustomerBooking" ToRole="AspNetUser" />
           <NavigationProperty Name="Vehicle" Relationship="Model.FK__CustomerB__vehic__6477ECF3" FromRole="CustomerBooking" ToRole="Vehicle" />
+          <NavigationProperty Name="CustomerBookingLocations" Relationship="Model.FK__CustomerB__custo__04E4BC85" FromRole="CustomerBooking" ToRole="CustomerBookingLocation" />
         </EntityType>
         <Association Name="FK__CustomerB__userI__628FA481">
           <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
@@ -511,6 +543,28 @@
             </Principal>
             <Dependent Role="CustomerBooking">
               <PropertyRef Name="vehicle_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CustomerBookingLocation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customer_booking_id" Type="Int32" Nullable="false" />
+          <Property Name="latitude" Type="Decimal" Nullable="false" Precision="10" Scale="8" />
+          <Property Name="longitude" Type="Decimal" Nullable="false" Precision="11" Scale="8" />
+          <NavigationProperty Name="CustomerBooking" Relationship="Model.FK__CustomerB__custo__04E4BC85" FromRole="CustomerBookingLocation" ToRole="CustomerBooking" />
+        </EntityType>
+        <Association Name="FK__CustomerB__custo__04E4BC85">
+          <End Type="Model.CustomerBooking" Role="CustomerBooking" Multiplicity="1" />
+          <End Type="Model.CustomerBookingLocation" Role="CustomerBookingLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerBooking">
+              <PropertyRef Name="customer_booking_id" />
+            </Principal>
+            <Dependent Role="CustomerBookingLocation">
+              <PropertyRef Name="customer_booking_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -618,6 +672,16 @@
                 <ScalarProperty Name="vehicle_id" ColumnName="vehicle_id" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="customer_booking_id" ColumnName="customer_booking_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerBookingLocations">
+            <EntityTypeMapping TypeName="Model.CustomerBookingLocation">
+              <MappingFragment StoreEntitySet="CustomerBookingLocation">
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="customer_booking_id" ColumnName="customer_booking_id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

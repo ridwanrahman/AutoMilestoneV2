@@ -215,7 +215,11 @@
     <Compile Include="Models\CustomerBooking.cs">
       <DependentUpon>AutoMilestoneModelDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerBookingLocation.cs">
+      <DependentUpon>AutoMilestoneModelDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\StaffCarUploadModel.cs" />
     <Compile Include="Models\userrolesbridging.cs">

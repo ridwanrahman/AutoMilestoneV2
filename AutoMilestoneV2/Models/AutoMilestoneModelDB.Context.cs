@@ -33,5 +33,6 @@ namespace AutoMilestoneV2.Models
         public virtual DbSet<Vehicle> Vehicles { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<CustomerBooking> CustomerBookings { get; set; }
+        public virtual DbSet<CustomerBookingLocation> CustomerBookingLocations { get; set; }
     }
 }

@@ -14,6 +14,12 @@ namespace AutoMilestoneV2.Models
     
     public partial class CustomerBooking
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CustomerBooking()
+        {
+            this.CustomerBookingLocations = new HashSet<CustomerBookingLocation>();
+        }
+    
         public int customer_booking_id { get; set; }
         public string userId { get; set; }
         public int vehicle_id { get; set; }
@@ -25,5 +31,7 @@ namespace AutoMilestoneV2.Models
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual Vehicle Vehicle { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CustomerBookingLocation> CustomerBookingLocations { get; set; }
     }
 }
