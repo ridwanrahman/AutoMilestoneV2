@@ -18,10 +18,11 @@
                 <th scope="col">From Date</th>
                 <th scope="col">To Date</th>
                 <th scope="col">Vehicle </th>
+                <th scope="col">Options</th>
             </tr>
         </thead>
         <tbody>
-            
+
             @foreach (var data in ViewBag.itemData)
             {
                 <tr>
@@ -32,11 +33,16 @@
                     <td>@data.from_date</td>
                     <td>@data.to_date</td>
                     <td>@data.vehicle_id</td>
+                    <td><a href="/staff/ShowDetails?query=@data.Id&query2=@data.customer_booking_id">View Details</a></td>
+
                 </tr>
             }
 
         </tbody>
     </table>
+
+    <button type="button" onclick="location.href='/staff/deletelocations'" class="btn">Delete all Locations</button>
+    <button type="button" class="btn">Delete all bookings</button>
 
 
 </div>

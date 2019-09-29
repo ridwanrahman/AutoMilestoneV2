@@ -14,7 +14,7 @@ namespace AutoMilestoneV2.Controllers.Staff
     {
         // GET: Staff
         public ActionResult Index()
-        {            
+        {
             string userId = User.Identity.GetUserId();
             using (var context = new Entities3())
             {
@@ -27,7 +27,7 @@ namespace AutoMilestoneV2.Controllers.Staff
                                  to_date=c.to_date,vehicle_id=c.vehicle_id}).ToList();
                 ViewBag.itemData = viewModel;
                 return View();
-            }            
+            }
         }
 
         public ActionResult AddVehicle()
@@ -72,6 +72,40 @@ namespace AutoMilestoneV2.Controllers.Staff
             ViewBag.first = db.AspNetUsers.ToList();
             ViewBag.ItemData = db.Vehicles.ToList();
             return View();
+        }
+
+        public ActionResult ShowDetails(string query, int query2)
+        {
+            using (var context = new Entities3())
+            {
+                var customerDetails = (from u in context.AspNetUsers
+                                   where u.Id == query
+                                   select new CustomerModel() { Id=u.Id, Email=u.Email}).ToList();
+                var customerBookingDetails = (from bd in context.CustomerBookings
+                                              where bd.customer_booking_id==query2
+                                              select new 
+                                              CustomerBookingModelForStaff() { customer_booking_id=bd.customer_booking_id,
+                                              vehicle_id=bd.vehicle_id, to_date=bd.to_date,
+                                              from_date=bd.from_date}).ToList();
+
+                var customerBookingLocations = (from c in context.CustomerBookingLocations
+                                                where c.customer_booking_id==query2
+                                                select new CustomerBookingLocationForStaff() {
+                                                longitude=c.longitude,latitude=c.latitude}).ToList();
+            }
+            return View();
+        }
+
+        public EmptyResult DeleteLocations()
+        {
+            using(var context = new Entities3())
+            {
+
+                
+            }
+            return null;
+           // return View();
+            
         }
     }
 }
