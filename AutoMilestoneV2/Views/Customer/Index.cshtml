@@ -26,17 +26,33 @@
         left: 10px;
         z-index: 1;
     }
-
-        .distance-container > * {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            font-size: 11px;
-            line-height: 18px;
-            display: block;
-            margin: 0;
-            padding: 5px 10px;
-            border-radius: 3px;
+    
+    .distance-container > * {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        font-size: 11px;
+        line-height: 18px;
+        display: block;
+        margin: 0;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+    .loader {
+        display: none;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+    }
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
         }
+        100% { transform: rotate(360deg); }
+    }
 </style>
 
 <div class="container-fluid">
@@ -62,13 +78,14 @@
         <input type="text" id="date_from" name="from" />
         <label for="to">to</label>
         <input type="text" id="date_to" name="to" />
+        <div class="loader"></div>
         FROM LOCATION:
 
         <div id='map' style='width: 700px; height: 500px;'></div>
         <div id='distance'></div>
         <div id='info'></div>
 
-        <button id="show_data">show data</button>
+        <button id="show_data" disabled>show data</button>
 
         <p><a href="#" class="btn btn-primary btn-lg">Done</a></p>
     </div>
@@ -94,6 +111,7 @@
                 }
             };
             var response = [];
+            $(".loader").css({'display':'hide'});
             
             mapboxgl.accessToken = 'pk.eyJ1Ijoicmlkd2FucmFobWFuIiwiYSI6ImNrMTJjYXd5MjAwbzgzZGxscGM3c3l5dnYifQ.Dus70kgKra8qK4EbZFUR3Q';
             var map = new mapboxgl.Map({
@@ -213,6 +231,17 @@
                 JSON.stringify(e.lngLat.wrap());
             });
 
+            $.fn.myFunction = function () {
+                console.log("booking constraint checker called");
+                console.log(date_from.length);
+                console.log(date_to.length);
+                if (date_from.length > 0 && date_to.length > 0) {
+                    $(".loader").css({ "display": "block" });
+                    console.log("have both dates");
+                } else {
+                    console.log("incomplete");
+                }
+            }
             $(".car_selection").click(function () {
                 car_id = $(this).attr("value");
                 alert("You have selected car with id " + car_id);
@@ -220,37 +249,31 @@
             $("#date_from").datepicker({ format: 'mm/dd/yyyy', startDate: '0d' });
             $("#date_from").change(function () {
                 date_from = $(this).val();
-                console.log(date_from);
+                $.fn.myFunction();
             });
             $('#date_to').datepicker({ format: 'mm/dd/yyyy', startDate: '0d' });
             $("#date_to").change(function () {
                 date_to = $(this).val();
-                console.log(date_to);
+                $.fn.myFunction();
             });
 
             $("#show_data").click(function () {
-                console.log(locations);
-                console.log("sending data");
-                console.log(date_from);
-                response.push(date_from);
-                console.log(date_to);
-                response.push(date_to);
-                console.log(car_id);
-                response.push(car_id);
-                console.log(response);
-                response.push(locations);
                 $.ajax({
                     type: "POST",
                     dataType: 'text',
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({ sendInfo: JSON.stringify(response) }),
-                    url: "/Customer/CreateBooking",                    
+                    url: "/Customer/CreateBooking",
                     success: function (result) {
-                        console.log("received");
+                        if (result == "\"success\"") {
+                            console.log("received");
+                        }
+                        else {
+                            console.log("need more work");
+                        }
                     }
                 })
             })
         })
     </script>
 </div>
-

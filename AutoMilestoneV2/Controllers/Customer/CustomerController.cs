@@ -25,6 +25,12 @@ namespace AutoMilestoneV2.Controllers.Customer
             return View();
         }
 
+        public JsonResult CheckBookingDate(string inputDates)
+        {
+            Console.WriteLine(inputDates);
+            return Json("success", JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public JsonResult CreateBooking(string sendInfo)
         {
@@ -45,50 +51,34 @@ namespace AutoMilestoneV2.Controllers.Customer
             date_from = result[0].Trim('\t', '[','"');
             date_to = result[1].Trim('\t', '[', '"');
 
-            //DateTime dt2 = DateTime.ParseExact(date_from,
-            //            "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-            //DateTime dt3 = DateTime.ParseExact(date_to,
-            //            "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-
-
             car_id = result[2].Trim('\t', '[', '"');
-            /*
-            CustomerBookingModel cs = new CustomerBookingModel()
-            {
-                userId = User.Identity.GetUserId(),
-                vehicle_id = Int32.Parse(car_id),
-                from_date = dt2,
-                to_date = dt3,
-                isAccepted = "false",
-                pickup_location = "location1",
-                dropoff_location = "location2"
-            };
-            */
             var vehicle_id = Int32.Parse(car_id);
-            using(var context = new Entities3())
+            try
             {
-                //context.CustomerBookings.Add(cs);
-                //context.SaveChanges();
-
-                context.Database.ExecuteSqlCommand("insert into " +
-                    "[dbo].[CustomerBooking]([userId],[vehicle_id]," +
-                    "[isAccepted],[to_date],[from_date],[pickup_location],[dropoff_location]) " +
-                    "values('" + userId + "', '" + car_id + "', 'false', '" + date_from + "'," +
-                    "'" + date_to + "','location1','location2')");
-                var lastId = (from c in context.CustomerBookings where 
-                          c.userId==userId && 
-                          c.vehicle_id== vehicle_id
-                          select c.customer_booking_id).ToArray();
-                //int lastIdAfterConvertingToInt = Int32.Parse(lastId);
-                for (int i = 3; i < result.Length - 1; i++)
+                using (var context = new Entities3())
                 {
-                    latitude = result[i];
-                    int j = i;
-                    longitude = result[j + 1];
                     context.Database.ExecuteSqlCommand("insert into " +
-                        "[dbo].[CustomerBookingLocation](customer_booking_id,latitude,longitude)" +
-                        "values('" + lastId[0] + "', '" + latitude+ "', '" + longitude + "')");
+                        "[dbo].[CustomerBooking]([userId],[vehicle_id]," +
+                        "[isAccepted],[to_date],[from_date],[pickup_location],[dropoff_location]) " +
+                        "values('" + userId + "', '" + car_id + "', 'false', '" + date_from + "'," +
+                        "'" + date_to + "','location1','location2')");
+                    var lastId = (from c in context.CustomerBookings
+                                  where c.userId == userId && c.vehicle_id == vehicle_id
+                                  select c.customer_booking_id).ToArray();
+                    for (int i = 3; i <= result.Length - 2; i = i + 2)
+                    {
+                        latitude = result[i].Trim('[', ']');
+                        int j = i;
+                        longitude = result[j + 1].Trim('[', ']');
+                        context.Database.ExecuteSqlCommand("insert into " +
+                            "[dbo].[CustomerBookingLocation](customer_booking_id,latitude,longitude)" +
+                            "values('" + lastId[0] + "', '" + latitude + "', '" + longitude + "')");
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                return Json("error", JsonRequestBehavior.AllowGet);
             }
             return Json("success", JsonRequestBehavior.AllowGet);
         }
