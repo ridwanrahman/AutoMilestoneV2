@@ -85,7 +85,7 @@
         <div id='distance'></div>
         <div id='info'></div>
 
-        <button id="show_data" disabled>show data</button>
+        <button id="show_data">show data</button>
 
         <p><a href="#" class="btn btn-primary btn-lg">Done</a></p>
     </div>
@@ -235,9 +235,21 @@
                 console.log("booking constraint checker called");
                 console.log(date_from.length);
                 console.log(date_to.length);
-                if (date_from.length > 0 && date_to.length > 0) {
+                if (date_from.length > 0 && date_to.length > 0 && car_id > 0) {
+                    var dates = car_id + "," + date_from + "," + date_to;
                     $(".loader").css({ "display": "block" });
                     console.log("have both dates");
+                    $.ajax({
+                        type: "POST",
+                        dataType: 'text',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ inputDates: JSON.stringify(dates) }),
+                        url: "/Customer/CheckBookingDate",
+                        success: function (result) {
+
+                        }
+
+                    })
                 } else {
                     console.log("incomplete");
                 }
@@ -258,6 +270,12 @@
             });
 
             $("#show_data").click(function () {
+                response.push(date_from);
+                response.push(date_to);
+                response.push(car_id);
+                response.push(locations);
+                console.log("*** sending ***")
+                console.log(response);
                 $.ajax({
                     type: "POST",
                     dataType: 'text',

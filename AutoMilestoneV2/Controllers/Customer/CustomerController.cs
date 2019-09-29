@@ -25,9 +25,38 @@ namespace AutoMilestoneV2.Controllers.Customer
             return View();
         }
 
+        [HttpPost]
         public JsonResult CheckBookingDate(string inputDates)
         {
-            Console.WriteLine(inputDates);
+            var response = "";
+            String[] spearator = { "," };
+            String[] result = inputDates.Split(spearator, StringSplitOptions.RemoveEmptyEntries);
+            int car_id = Int32.Parse(result[0].Trim('\t', '"'));
+            DateTime date_from = Convert.ToDateTime(result[1].Trim('\t', '"'));
+            DateTime date_to = Convert.ToDateTime(result[2].Trim('\t', '"'));
+            using(var context = new Entities3())
+            {
+                var q = (from c in context.CustomerBookings where c.vehicle_id == car_id
+                         select c.from_date).ToArray();
+                if(q==null)
+                {
+
+                }
+                else
+                {
+                    int day = q[0].Value.Day;
+                    int day2 = date_from.Month;
+                    int day_from = date_from.Month;
+                    if (day == day2)
+                    {
+                        response = "already booked";
+                    }
+                    else
+                    {
+                        response = "not booked";
+                    }
+                }
+            }
             return Json("success", JsonRequestBehavior.AllowGet);
         }
 
@@ -60,8 +89,8 @@ namespace AutoMilestoneV2.Controllers.Customer
                     context.Database.ExecuteSqlCommand("insert into " +
                         "[dbo].[CustomerBooking]([userId],[vehicle_id]," +
                         "[isAccepted],[to_date],[from_date],[pickup_location],[dropoff_location]) " +
-                        "values('" + userId + "', '" + car_id + "', 'false', '" + date_from + "'," +
-                        "'" + date_to + "','location1','location2')");
+                        "values('" + userId + "', '" + car_id + "', 'false', '" + date_to + "'," +
+                        "'" + date_from + "','location1','location2')");
                     var lastId = (from c in context.CustomerBookings
                                   where c.userId == userId && c.vehicle_id == vehicle_id
                                   select c.customer_booking_id).ToArray();
