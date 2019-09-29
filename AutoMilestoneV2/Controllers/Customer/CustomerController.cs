@@ -38,16 +38,21 @@ namespace AutoMilestoneV2.Controllers.Customer
             {
                 var q = (from c in context.CustomerBookings where c.vehicle_id == car_id
                          select c.from_date).ToArray();
-                if(q==null)
+                var q2 = (from c in context.CustomerBookings
+                          where c.vehicle_id == car_id
+                          select c.to_date).ToArray();
+                if (q==null)
                 {
 
                 }
                 else
                 {
-                    int day = q[0].Value.Day;
-                    int day2 = date_from.Month;
-                    int day_from = date_from.Month;
-                    if (day == day2)
+                    int bookedDayFrom = q[0].Day;
+                    int bookedDayTo = q2[0].Day;
+                    //int day = 0;
+                    int askingForBooking_From = date_from.Month;
+                    int askingForBooking_To = date_to.Month;                    
+                    if (bookedDayFrom == askingForBooking_From)
                     {
                         response = "already booked";
                     }
@@ -57,7 +62,7 @@ namespace AutoMilestoneV2.Controllers.Customer
                     }
                 }
             }
-            return Json("success", JsonRequestBehavior.AllowGet);
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

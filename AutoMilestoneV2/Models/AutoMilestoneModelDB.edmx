@@ -76,8 +76,8 @@
           <Property Name="userId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="vehicle_id" Type="int" Nullable="false" />
           <Property Name="isAccepted" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="to_date" Type="datetime" />
-          <Property Name="from_date" Type="datetime" />
+          <Property Name="to_date" Type="datetime" Nullable="false" />
+          <Property Name="from_date" Type="datetime" Nullable="false" />
           <Property Name="pickup_location" Type="nvarchar(max)" />
           <Property Name="dropoff_location" Type="nvarchar(max)" />
         </EntityType>
@@ -87,8 +87,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="customer_booking_id" Type="int" Nullable="false" />
-          <Property Name="latitude" Type="numeric" Precision="10" Scale="8" Nullable="false" />
-          <Property Name="longitude" Type="numeric" Precision="11" Scale="8" Nullable="false" />
+          <Property Name="longitude" Type="nvarchar(max)" />
+          <Property Name="latitude" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="userrolesbridging">
           <Key>
@@ -514,8 +514,8 @@
           <Property Name="userId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="vehicle_id" Type="Int32" Nullable="false" />
           <Property Name="isAccepted" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="to_date" Type="DateTime" Precision="3" />
-          <Property Name="from_date" Type="DateTime" Precision="3" />
+          <Property Name="to_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="from_date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="pickup_location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="dropoff_location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK__CustomerB__userI__628FA481" FromRole="CustomerBooking" ToRole="AspNetUser" />
@@ -552,8 +552,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="customer_booking_id" Type="Int32" Nullable="false" />
-          <Property Name="latitude" Type="Decimal" Nullable="false" Precision="10" Scale="8" />
-          <Property Name="longitude" Type="Decimal" Nullable="false" Precision="11" Scale="8" />
+          <Property Name="longitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CustomerBooking" Relationship="Model.FK__CustomerB__custo__04E4BC85" FromRole="CustomerBookingLocation" ToRole="CustomerBooking" />
         </EntityType>
         <Association Name="FK__CustomerB__custo__04E4BC85">
@@ -678,8 +678,8 @@
           <EntitySetMapping Name="CustomerBookingLocations">
             <EntityTypeMapping TypeName="Model.CustomerBookingLocation">
               <MappingFragment StoreEntitySet="CustomerBookingLocation">
-                <ScalarProperty Name="longitude" ColumnName="longitude" />
                 <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
                 <ScalarProperty Name="customer_booking_id" ColumnName="customer_booking_id" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

@@ -16,8 +16,8 @@ namespace AutoMilestoneV2.Models
     {
         public int Id { get; set; }
         public int customer_booking_id { get; set; }
-        public decimal latitude { get; set; }
-        public decimal longitude { get; set; }
+        public string longitude { get; set; }
+        public string latitude { get; set; }
     
         public virtual CustomerBooking CustomerBooking { get; set; }
     }

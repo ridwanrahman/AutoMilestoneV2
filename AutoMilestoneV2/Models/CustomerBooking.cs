@@ -24,8 +24,8 @@ namespace AutoMilestoneV2.Models
         public string userId { get; set; }
         public int vehicle_id { get; set; }
         public string isAccepted { get; set; }
-        public Nullable<System.DateTime> to_date { get; set; }
-        public Nullable<System.DateTime> from_date { get; set; }
+        public System.DateTime to_date { get; set; }
+        public System.DateTime from_date { get; set; }
         public string pickup_location { get; set; }
         public string dropoff_location { get; set; }
     

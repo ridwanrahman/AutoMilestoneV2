@@ -87,7 +87,7 @@
 
         <button id="show_data">show data</button>
 
-        <p><a href="#" class="btn btn-primary btn-lg">Done</a></p>
+        <p><a href="#" class="btn btn-primary btn-lg" id="modalbutton">Done</a></p>
     </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
@@ -96,6 +96,9 @@
     <script>
 
         $(document).ready(function () {
+            $("#modalbutton").click(function () {
+                $("#modal").toggle('show');
+            })
             var car_id = 0;
             var date_from = "";
             var date_to = "";
@@ -111,8 +114,8 @@
                 }
             };
             var response = [];
-            $(".loader").css({'display':'hide'});
-            
+            $(".loader").css({ 'display': 'hide' });
+
             mapboxgl.accessToken = 'pk.eyJ1Ijoicmlkd2FucmFobWFuIiwiYSI6ImNrMTJjYXd5MjAwbzgzZGxscGM3c3l5dnYifQ.Dus70kgKra8qK4EbZFUR3Q';
             var map = new mapboxgl.Map({
                 container: 'map',
@@ -173,7 +176,7 @@
 
 
                 map.on('click', function (e) {
-                    var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });                    
+                    var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
                     console.log("herere");
                     // Remove the linestring from the group
                     // So we can redraw it based on the points collection
@@ -184,8 +187,8 @@
                         geojson.features = geojson.features.filter(function (point) {
                             return point.properties.id !== id;
                         });
-                    } else {                        
-                         point = {
+                    } else {
+                        point = {
                             "type": "Feature",
                             "geometry": {
                                 "type": "Point",
@@ -224,17 +227,18 @@
             });
             map.on('mousemove', function (e) {
                 document.getElementById('info').innerHTML =
-                // e.point is the x, y coordinates of the mousemove event relative
-                // to the top-left corner of the map
-                JSON.stringify(e.point) + '<br />' +
-                // e.lngLat is the longitude, latitude geographical position of the event
-                JSON.stringify(e.lngLat.wrap());
+                    // e.point is the x, y coordinates of the mousemove event relative
+                    // to the top-left corner of the map
+                    JSON.stringify(e.point) + '<br />' +
+                    // e.lngLat is the longitude, latitude geographical position of the event
+                    JSON.stringify(e.lngLat.wrap());
             });
 
             $.fn.myFunction = function () {
                 console.log("booking constraint checker called");
                 console.log(date_from.length);
                 console.log(date_to.length);
+                var target = $(".loader");
                 if (date_from.length > 0 && date_to.length > 0 && car_id > 0) {
                     var dates = car_id + "," + date_from + "," + date_to;
                     $(".loader").css({ "display": "block" });
@@ -246,9 +250,14 @@
                         data: JSON.stringify({ inputDates: JSON.stringify(dates) }),
                         url: "/Customer/CheckBookingDate",
                         success: function (result) {
-
+                            target.css({"display":"hide"})
+                            if (result == "\"already booked\"") {
+                                alert("this car is already booked in the given date");
+                            } else {
+                                $(".loader").css({ "display": "hide" });
+                                alert("booking will be created");
+                            }
                         }
-
                     })
                 } else {
                     console.log("incomplete");
@@ -274,8 +283,6 @@
                 response.push(date_to);
                 response.push(car_id);
                 response.push(locations);
-                console.log("*** sending ***")
-                console.log(response);
                 $.ajax({
                     type: "POST",
                     dataType: 'text',

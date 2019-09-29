@@ -6,3 +6,38 @@
 
 <h2>This is staff dashboard</h2>
 
+<div class="container">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">User Id</th>
+                <th scope="col">Email</th>
+                <th scope="col">Customer booking id</th>
+                <th scope="col">From Date</th>
+                <th scope="col">To Date</th>
+                <th scope="col">Vehicle </th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            @foreach (var data in ViewBag.itemData)
+            {
+                <tr>
+                    <th scope="row">1</th>
+                    <td>@data.Id</td>
+                    <td>@data.Email</td>
+                    <td>@data.customer_booking_id</td>
+                    <td>@data.from_date</td>
+                    <td>@data.to_date</td>
+                    <td>@data.vehicle_id</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+
+</div>
+

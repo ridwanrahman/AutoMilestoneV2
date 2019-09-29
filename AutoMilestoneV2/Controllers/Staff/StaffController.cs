@@ -14,9 +14,20 @@ namespace AutoMilestoneV2.Controllers.Staff
     {
         // GET: Staff
         public ActionResult Index()
-        {
+        {            
             string userId = User.Identity.GetUserId();
-            return View();
+            using (var context = new Entities3())
+            {
+                //select u.Id,u.Email, c.customer_booking_id, c.from_date, c.to_date, c.vehicle_id 
+                // from AspNetUsers u join CustomerBooking c on u.Id = c.userId
+                var viewModel = (from u in context.AspNetUsers join c in context.CustomerBookings
+                                 on u.Id equals c.userId
+                                 select new StaffViewCustomerBookingInDashboard() { Id=u.Id, Email=u.Email,
+                                 customer_booking_id=c.customer_booking_id,from_date=c.from_date,
+                                 to_date=c.to_date,vehicle_id=c.vehicle_id}).ToList();
+                ViewBag.itemData = viewModel;
+                return View();
+            }            
         }
 
         public ActionResult AddVehicle()

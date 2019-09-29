@@ -24,4 +24,15 @@ namespace AutoMilestoneV2.Models
         public string pickup_location { get; set; }
         public string dropoff_location { get; set; }
     }
+
+    public class StaffViewCustomerBookingInDashboard
+    {
+        public string Id { get; set; }
+        public string Email { get; set; }
+        public int customer_booking_id { get; set; }
+        public DateTime from_date { get; set; }
+        public DateTime to_date { get; set; }
+        public int vehicle_id { get; set; }
+
+    }
 }

@@ -72,7 +72,7 @@ namespace AutoMilestoneV2.Controllers
                               ur.RoleId equals ro.Id where u.Email==email
                               select ro.Name).ToArray();
                 return result;
-            }            
+            }
             return null;
         }
 
