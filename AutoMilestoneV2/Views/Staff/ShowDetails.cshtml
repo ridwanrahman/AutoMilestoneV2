@@ -4,5 +4,36 @@
     Layout = "~/Views/Shared/StaffLayout.cshtml";
 }
 
-<h2>ShowDetails</h2>
+<h2>Details of User</h2>
+<div class="container">
+    <div>
+        <h2>User details</h2>
+        @foreach (var data in ViewBag.customerDetails)
+        {
+            @data.Id
+            @data.Email
+        }
+            
+    </div>
+    <div>
+        <h2>Customer Booking Details</h2>
+        @foreach (var data in ViewBag.customerBookingDetails)
+        {
+            @data.customer_booking_id
+            @data.vehicle_id
+            @data.from_date
+            @data.to_date
+        }
+
+    </div>
+    <div>
+        <h2>MAP</h2>
+        @foreach(var data in ViewBag.customerBookingLocations)
+        {
+            @data.longitude @data.latitude <br/>
+        }
+    </div>
+
+
+</div>
 

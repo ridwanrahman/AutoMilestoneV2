@@ -80,7 +80,7 @@ namespace AutoMilestoneV2.Controllers.Staff
             {
                 var customerDetails = (from u in context.AspNetUsers
                                    where u.Id == query
-                                   select new CustomerModel() { Id=u.Id, Email=u.Email}).ToList();
+                                   select new CustomerModel() { Id=u.Id, Email=u.Email}).ToArray();
                 var customerBookingDetails = (from bd in context.CustomerBookings
                                               where bd.customer_booking_id==query2
                                               select new 
@@ -92,8 +92,12 @@ namespace AutoMilestoneV2.Controllers.Staff
                                                 where c.customer_booking_id==query2
                                                 select new CustomerBookingLocationForStaff() {
                                                 longitude=c.longitude,latitude=c.latitude}).ToList();
+                ViewBag.customerDetails = customerDetails;
+                ViewBag.customerBookingDetails = customerBookingDetails;
+                ViewBag.customerBookingLocations = customerBookingLocations;
+                return View();
             }
-            return View();
+            
         }
 
         public EmptyResult DeleteLocations()
