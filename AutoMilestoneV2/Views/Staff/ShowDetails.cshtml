@@ -4,6 +4,10 @@
     Layout = "~/Views/Shared/StaffLayout.cshtml";
 }
 
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css' rel='stylesheet' />
+
+
 <h2>Details of User</h2>
 <div class="container">
     <div>
@@ -13,7 +17,7 @@
             @data.Id
             @data.Email
         }
-            
+
     </div>
     <div>
         <h2>Customer Booking Details</h2>
@@ -28,12 +32,96 @@
     </div>
     <div>
         <h2>MAP</h2>
-        @foreach(var data in ViewBag.customerBookingLocations)
+        @foreach (var data in ViewBag.customerBookingLocations)
         {
-            @data.longitude @data.latitude <br/>
+            @data.longitude @data.latitude <br />
         }
+
+        <div id='map_simple' class='map'> </div>
+        <div id='map' style='width: 700px; height: 500px;'></div>
     </div>
 
 
 </div>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
 
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+
+            mapboxgl.accessToken = 'pk.eyJ1Ijoicmlkd2FucmFobWFuIiwiYSI6ImNrMTZnaHZ3NTE0Zm4zbHRqNTByZ3VibnYifQ.iE2lQobcq1MppwG49nkyXg';
+
+            var map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11'
+            });
+            //
+
+            map.on('load', function () {
+                //
+
+                map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function(error, image) {
+                if (error) throw error;
+                    map.addImage('cat', image);
+    
+                map.addLayer({
+                "id": "points",
+                "type": "symbol",
+                "source": {
+                "type": "geojson",
+                "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                "type": "Feature",
+                "geometry": {
+                "type": "Point",
+                "coordinates": [0, 0]
+                }
+                }]
+                }
+                },
+                "layout": {
+                "icon-image": "cat",
+                "icon-size": 0.25
+                }
+                });
+
+                    map.addImage('cat', image);
+                    map.addLayer({
+                "id": "points2",
+                "type": "symbol",
+                "source": {
+                "type": "geojson",
+                "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                "type": "Feature",
+                "geometry": {
+                "type": "Point",
+                "coordinates": [145.00777827168451, -37.84709861484512]
+                }
+                }]
+                }
+                },
+                "layout": {
+                "icon-image": "cat",
+                "icon-size": 0.25
+                }
+                });
+
+
+                });
+
+
+
+                //
+            })              
+            
+        })
+    </script>
+}

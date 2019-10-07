@@ -34,6 +34,10 @@ namespace AutoMilestoneV2.Controllers.Customer
             int car_id = Int32.Parse(result[0].Trim('\t', '"'));
             DateTime date_from = Convert.ToDateTime(result[1].Trim('\t', '"'));
             DateTime date_to = Convert.ToDateTime(result[2].Trim('\t', '"'));
+            var date_from_converted = date_from.ToString("yyyy-MM-dd");
+            var date_to_converted = date_to.ToString("yyyy-MM-dd");
+            DateTime date_from_date = Convert.ToDateTime(date_from_converted);
+            DateTime date_to_date = Convert.ToDateTime(date_to_converted);
             using(var context = new Entities3())
             {
                 var q = (from c in context.CustomerBookings where c.vehicle_id == car_id
@@ -41,25 +45,18 @@ namespace AutoMilestoneV2.Controllers.Customer
                 var q2 = (from c in context.CustomerBookings
                           where c.vehicle_id == car_id
                           select c.to_date).ToArray();
-                if (q==null)
-                {
 
+                var isBooked = (from c in context.CustomerBookings
+                                where c.from_date >= date_from_date && 
+                                c.to_date <= date_to_date select c.customer_booking_id).ToList();
+
+                if (isBooked.Count > 0)
+                {
+                    response = "already booked";
                 }
                 else
                 {
-                    int bookedDayFrom = q[0].Day;
-                    int bookedDayTo = q2[0].Day;
-                    //int day = 0;
-                    int askingForBooking_From = date_from.Month;
-                    int askingForBooking_To = date_to.Month;                    
-                    if (bookedDayFrom == askingForBooking_From)
-                    {
-                        response = "already booked";
-                    }
-                    else
-                    {
-                        response = "not booked";
-                    }
+                    response = "not booked";
                 }
             }
             return Json(response, JsonRequestBehavior.AllowGet);

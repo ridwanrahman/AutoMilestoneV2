@@ -9,6 +9,14 @@
 
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js'></script>
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css' rel='stylesheet' />
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
 <style>
     body {
         margin: 0;
@@ -16,6 +24,7 @@
     }
 
     #map {
+        display: none;
         position: relative;
         width: 100%;
     }
@@ -26,17 +35,18 @@
         left: 10px;
         z-index: 1;
     }
-    
-    .distance-container > * {
-        background-color: rgba(0, 0, 0, 0.5);
-        color: #fff;
-        font-size: 11px;
-        line-height: 18px;
-        display: block;
-        margin: 0;
-        padding: 5px 10px;
-        border-radius: 3px;
-    }
+
+        .distance-container > * {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 11px;
+            line-height: 18px;
+            display: block;
+            margin: 0;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+
     .loader {
         display: none;
         border: 16px solid #f3f3f3;
@@ -47,15 +57,45 @@
         -webkit-animation: spin 2s linear infinite; /* Safari */
         animation: spin 2s linear infinite;
     }
+
     @@keyframes spin {
         0% {
             transform: rotate(0deg);
         }
-        100% { transform: rotate(360deg); }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 </style>
 
-<div class="container-fluid">
+<div class="container">
+
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Modal Heading</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Modal body..
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="close">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
     <br />
     <br />
     <br />
@@ -71,17 +111,17 @@
             @foreach (var data in ViewBag.ItemData)
 
             {
-                <a href="#" id="car_selection" value="@data.Id" class="list-group-item car_selection">@data.Name, @data.vehicle_description</a>
+                <a href="javascript:void()" id="car_selection" value="@data.Id" class="list-group-item car_selection">@data.Name, @data.vehicle_description</a>
             }
         </div>
         <label for="from">From</label>
-        <input type="text" id="date_from" name="from" />
+        <input type="text" value="" id="date_from" name="from" />
         <label for="to">to</label>
-        <input type="text" id="date_to" name="to" />
+        <input type="text" id="date_to" value="" name="to" />
         <div class="loader"></div>
         FROM LOCATION:
 
-        <div id='map' style='width: 700px; height: 500px;'></div>
+        <div id='map' class="map" style='width: 700px; height: 500px;'></div>
         <div id='distance'></div>
         <div id='info'></div>
 
@@ -89,6 +129,8 @@
 
         <p><a href="#" class="btn btn-primary btn-lg" id="modalbutton">Done</a></p>
     </div>
+
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
@@ -97,8 +139,13 @@
 
         $(document).ready(function () {
             $("#modalbutton").click(function () {
-                $("#modal").toggle('show');
+                $("#myModal").toggle('show');
+                return false;
+            });
+            $("#close").click(function () {
+                $("#myModal").toggle('hide');
             })
+            $("#map").css({ "display": "none" });
             var car_id = 0;
             var date_from = "";
             var date_to = "";
@@ -236,12 +283,13 @@
 
             $.fn.myFunction = function () {
                 console.log("booking constraint checker called");
-                console.log(date_from.length);
-                console.log(date_to.length);
-                var target = $(".loader");
+                console.log(date_from);
+                console.log(date_to);
+                var target = this;
+                var spinner = $(".loader");
                 if (date_from.length > 0 && date_to.length > 0 && car_id > 0) {
                     var dates = car_id + "," + date_from + "," + date_to;
-                    $(".loader").css({ "display": "block" });
+                    spinner.css({ "display": "block" });
                     console.log("have both dates");
                     $.ajax({
                         type: "POST",
@@ -250,12 +298,23 @@
                         data: JSON.stringify({ inputDates: JSON.stringify(dates) }),
                         url: "/Customer/CheckBookingDate",
                         success: function (result) {
-                            target.css({"display":"hide"})
                             if (result == "\"already booked\"") {
+                                spinner.css({ "display": "none" });
+                                $("#date_from").val('');
+                                $("#date_to").val('');
+                                date_from = "";
+                                date_to = "";
                                 alert("this car is already booked in the given date");
                             } else {
-                                $(".loader").css({ "display": "hide" });
+
                                 alert("booking will be created");
+                                $("#map").css({
+                                    "display": "block",
+                                    "position": "relative",
+                                    "width": "100%"
+                                });
+                                map.resize();
+                                spinner.css({ "display": "none" });
                             }
                         }
                     })
@@ -267,12 +326,12 @@
                 car_id = $(this).attr("value");
                 alert("You have selected car with id " + car_id);
             });
-            $("#date_from").datepicker({ format: 'mm/dd/yyyy', startDate: '0d' });
+            $("#date_from").datepicker({ format: 'dd/mm/yyyy', startDate: '0d' });
             $("#date_from").change(function () {
                 date_from = $(this).val();
                 $.fn.myFunction();
             });
-            $('#date_to').datepicker({ format: 'mm/dd/yyyy', startDate: '0d' });
+            $('#date_to').datepicker({ format: 'dd/mm/yyyy', startDate: '0d' });
             $("#date_to").change(function () {
                 date_to = $(this).val();
                 $.fn.myFunction();

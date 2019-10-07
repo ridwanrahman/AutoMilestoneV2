@@ -19,7 +19,7 @@
     *@
 </head>
 <body>
-    <div class="container-fluid body">
+    <div class="container">
         @*
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">Administrator Panel</a>
@@ -55,21 +55,19 @@
         *@
 
         <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Admin Panel", "Index", "Admin", new { area = "" }, new { @class = "navbar-brand" })
                      @*@Html.ActionLink("Add staff", "AddStaff", "Admin", null, new { @class = "nav-link" })*@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li>@Html.ActionLink("Add staff", "AddStaff", "Admin")</li>
-                        
-                        
                     </ul>
                     @Html.Partial("_LoginPartial")
                 </div>
