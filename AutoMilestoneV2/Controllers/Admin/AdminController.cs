@@ -10,21 +10,22 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using AutoMilestoneV2.Controllers;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Newtonsoft.Json;
 
 namespace AutoMilestoneV2.Controllers.Admin
 {
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {        
         // GET: Admin
         public ActionResult Index()
         {
-            
-            
             return View();
         }
-
+        
         public ActionResult AddStaff()
         {
+            ViewBag.Message = "hi";
             return View();
         }
 
@@ -49,10 +50,19 @@ namespace AutoMilestoneV2.Controllers.Admin
             {
                 ViewBag.Message = "error";
                 return View();
-
             }
-            
-            
+        }
+
+        public ActionResult SendEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SendEmail(EmailViewModel emailMessage)
+        {
+            Console.WriteLine(emailMessage);
+            return View();
         }
     }
 }

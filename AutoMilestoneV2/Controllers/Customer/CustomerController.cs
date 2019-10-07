@@ -13,6 +13,10 @@ namespace AutoMilestoneV2.Controllers.Customer
     [RequireHttps]
     public class CustomerController : Controller
     {
+        public ActionResult Index2()
+        {
+            return View();
+        }
         // GET: Customer
         public ActionResult Index()
         {

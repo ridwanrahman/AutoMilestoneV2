@@ -110,4 +110,13 @@ namespace AutoMilestoneV2.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+
+    public class EmailViewModel
+    {
+        [Key]
+        public int Id { get; set; }
+        public string messageTo { get; set; }
+        public string messageSubject { get; set; }
+        public string messageBody { get; set; }
+    }
 }

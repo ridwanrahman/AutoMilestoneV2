@@ -230,6 +230,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="WebRoleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\aspnet-AutoMilestoneV2-20190920065819.mdf" />
@@ -466,6 +467,8 @@
     <Content Include="Views\Vehicles\Edit.cshtml" />
     <Content Include="Views\Vehicles\Index.cshtml" />
     <Content Include="Views\Staff\ShowDetails.cshtml" />
+    <Content Include="Views\Customer\Index2.cshtml" />
+    <Content Include="Views\Admin\SendEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\File\" />

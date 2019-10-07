@@ -1,0 +1,142 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Styles.Render("~/Content/CustomerStyleSheet.css")
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css' rel='stylesheet' />
+
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
+
+
+<h2>Index2</h2>
+
+<div class="container">
+    <div id='map' class="map" style='width: 700px; height: 500px;'></div>
+
+    <button id="send_req">send reqq</button>
+
+</div>
+
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+<script>
+
+    $(document).ready(function () {
+        var location1 = [];
+        var location2 = [];
+        var url = "";
+        mapboxgl.accessToken = 'pk.eyJ1Ijoicmlkd2FucmFobWFuIiwiYSI6ImNrMTJjYXd5MjAwbzgzZGxscGM3c3l5dnYifQ.Dus70kgKra8qK4EbZFUR3Q';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [144.95, -37.82], // starting position
+            zoom: 11.5 // starting zoom
+        });
+
+        var canvas = map.getCanvasContainer();
+
+        var marker = new mapboxgl.Marker() // initialize a new marker
+            .setLngLat([144.95, -37.82]) // Marker [lng, lat] coordinates
+            .addTo(map);
+
+        var geocoder = new MapboxGeocoder({ // Initialize the geocoder
+            accessToken: mapboxgl.accessToken, // Set the access token
+            mapboxgl: mapboxgl, // Set the mapbox-gl instance
+            marker: false, // Do not use the default marker style
+        });
+        // Add the geocoder to the map
+        map.addControl(geocoder);
+
+        var g2 = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl,
+            marker: false,
+        })
+        map.addControl(g2);
+
+
+
+        map.on('load', function () {
+            console.log("load");
+            map.addSource('single-point', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: []
+                }
+            })
+            map.addLayer({
+                id: 'point',
+                source: 'single-point',
+                type: 'circle',
+                paint: {
+                    'circle-radius': 10,
+                    'circle-color': '#448ee4'
+                } 
+            });
+        });
+
+        geocoder.on('result', function (e) {
+            map.getSource('single-point').setData(e.result.geometry);
+            location1.push(e.result.geometry);
+            console.log("pppp");
+            console.log(e.result.geometry);
+        });
+        g2.on('result', function (e) {
+            map.getSource('single-point').setData(e.result.geometry);
+            location2.push(e.result.geometry);
+            console.log("pppp");
+            console.log(e.result.geometry);
+        })
+
+        
+
+        $("#send_req").click(function () {
+            //alert("asdf");
+            var access_token = "pk.eyJ1Ijoicmlkd2FucmFobWFuIiwiYSI6ImNrMTJjYXd5MjAwbzgzZGxscGM3c3l5dnYifQ.Dus70kgKra8qK4EbZFUR3Q";
+            var co1 = location1[0]['coordinates'][0];
+            var co2 = location1[0]['coordinates'][1];
+            var co3 = location2[0]['coordinates'][0];
+            var co4 = location2[0]['coordinates'][1];
+            var profile = "driving";
+            url = "https://api.mapbox.com/directions/v5/mapbox/" + profile + "/" + co1 + "," + co2 + ";" + co3 + "," + co4 + ".json?access_token=" + access_token;
+            //console.log(url);
+            console.log("herer");
+            /*
+             */
+            getRoute(url, map);
+        });
+
+        function getRoute(url, map) {
+            console.log(url);
+            $.ajax({
+                url: url,
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    console.log("api call success");
+                }
+            }).done(function (result) {
+                console.log(result);
+                var data = result.routes[0];
+                var route = data.geometry;
+                console.log(data);
+                console.log(route);
+                var geojson = {
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: route
+                    }
+                }
+            });
+
+        }
+    })
+</script>

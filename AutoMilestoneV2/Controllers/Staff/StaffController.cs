@@ -12,6 +12,7 @@ namespace AutoMilestoneV2.Controllers.Staff
 {
     public class StaffController : Controller
     {
+        [Authorize(Roles ="Staff")]
         // GET: Staff
         public ActionResult Index()
         {
@@ -30,6 +31,7 @@ namespace AutoMilestoneV2.Controllers.Staff
             }
         }
 
+        [Authorize(Roles = "Staff")]
         public ActionResult AddVehicle()
         {
             string userId = User.Identity.GetUserId();
@@ -73,7 +75,7 @@ namespace AutoMilestoneV2.Controllers.Staff
             ViewBag.ItemData = db.Vehicles.ToList();
             return View();
         }
-
+        [Authorize(Roles = "Staff")]
         public ActionResult ShowDetails(string query, int query2)
         {
             using (var context = new Entities3())
