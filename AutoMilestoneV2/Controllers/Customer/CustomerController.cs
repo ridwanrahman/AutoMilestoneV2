@@ -40,15 +40,10 @@ namespace AutoMilestoneV2.Controllers.Customer
             DateTime date_to_date = Convert.ToDateTime(date_to_converted);
             using(var context = new Entities3())
             {
-                var q = (from c in context.CustomerBookings where c.vehicle_id == car_id
-                         select c.from_date).ToArray();
-                var q2 = (from c in context.CustomerBookings
-                          where c.vehicle_id == car_id
-                          select c.to_date).ToArray();
-
                 var isBooked = (from c in context.CustomerBookings
                                 where c.from_date >= date_from_date && 
-                                c.to_date <= date_to_date select c.customer_booking_id).ToList();
+                                c.to_date <= date_to_date && c.vehicle_id == car_id
+                                select c.customer_booking_id).ToList();
 
                 if (isBooked.Count > 0)
                 {

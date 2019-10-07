@@ -57,6 +57,7 @@
         -webkit-animation: spin 2s linear infinite; /* Safari */
         animation: spin 2s linear infinite;
     }
+    
 
     @@keyframes spin {
         0% {
@@ -77,25 +78,19 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Modal Heading</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="modalTitle"></h4>
                 </div>
-
                 <!-- Modal body -->
-                <div class="modal-body">
-                    Modal body..
+                <div class="modal-body" id="modalBody">
+                    
                 </div>
-
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal" id="close">Close</button>
                 </div>
-
             </div>
         </div>
     </div>
-
-
     <br />
     <br />
     <br />
@@ -104,260 +99,271 @@
         <p class="lead">Select from our wide range of cars</p>
         <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
     </div>
-
     <div>
         Available cars
         <div class="list-group">
             @foreach (var data in ViewBag.ItemData)
-
             {
-                <a href="javascript:void()" id="car_selection" value="@data.Id" class="list-group-item car_selection">@data.Name, @data.vehicle_description</a>
+                <a href="javascript:void(0)" id="car_selection" value="@data.Id" class="list-group-item car_selection">@data.Name, @data.vehicle_description</a>
             }
         </div>
-        <label for="from">From</label>
-        <input type="text" value="" id="date_from" name="from" />
-        <label for="to">to</label>
-        <input type="text" id="date_to" value="" name="to" />
-        <div class="loader"></div>
-        FROM LOCATION:
 
-        <div id='map' class="map" style='width: 700px; height: 500px;'></div>
-        <div id='distance'></div>
-        <div id='info'></div>
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="from">From</label>
+                <input type="text" value="" id="date_from" name="from" />
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="to">to</label>
+                <input type="text" id="date_to" value="" name="to" />
+            </div>
+            <div class="loader"></div>
+            <br />
+            <div>
+                FROM LOCATION:
+                <div id='map' class="map" style='width: 700px; height: 500px;'></div>
+                <div id='distance'></div>
+                <div id='info'></div>
+            </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <button id="show_data">show data</button>
+                <p><a href="#" class="btn btn-primary btn-lg" id="modalbutton">Done</a></p>
+            </div>
+        </div>
 
-        <button id="show_data">show data</button>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        <script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
 
-        <p><a href="#" class="btn btn-primary btn-lg" id="modalbutton">Done</a></p>
-    </div>
-
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    <script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
-
-    <script>
-
-        $(document).ready(function () {
-            $("#modalbutton").click(function () {
-                $("#myModal").toggle('show');
-                return false;
-            });
-            $("#close").click(function () {
-                $("#myModal").toggle('hide');
-            })
-            $("#map").css({ "display": "none" });
-            var car_id = 0;
-            var date_from = "";
-            var date_to = "";
-            var locations = [];
-            var point = {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": []
-                },
-                "properties": {
-                    "id": null
-                }
-            };
-            var response = [];
-            $(".loader").css({ 'display': 'hide' });
-
-            mapboxgl.accessToken = 'pk.eyJ1Ijoicmlkd2FucmFobWFuIiwiYSI6ImNrMTJjYXd5MjAwbzgzZGxscGM3c3l5dnYifQ.Dus70kgKra8qK4EbZFUR3Q';
-            var map = new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/mapbox/streets-v11',
-                center: [144.95, -37.82], // starting position
-                zoom: 11.5 // starting zoom
-            });
-            // Add zoom and rotation controls to the map.
-            map.addControl(new mapboxgl.NavigationControl());
-
-            var distanceContainer = document.getElementById('distance');
-            // GeoJSON object to hold our measurement features
-            var geojson = {
-                "type": "FeatureCollection",
-                "features": []
-            };
-
-            // Used to draw a line between points
-            var linestring = {
-                "type": "Feature",
-                "geometry": {
-                    "type": "LineString",
-                    "coordinates": []
-                }
-            };
-
-            map.on('load', function () {
-                map.addSource('geojson', {
-                    "type": "geojson",
-                    "data": geojson
+        <script>
+            $(document).ready(function () {
+                $("#modalbutton").click(function () {
+                    $("#myModal").toggle('show');
+                    return false;
                 });
-                // Add styles to the map
-                map.addLayer({
-                    id: 'measure-points',
-                    type: 'circle',
-                    source: 'geojson',
-                    paint: {
-                        'circle-radius': 5,
-                        'circle-color': '#000'
+                $("#close").click(function () {
+                    $("#myModal").toggle('hide');
+                    return false;
+                })
+                $("#map").css({ "display": "none" });
+                var car_id = 0;
+                var date_from = "";
+                var date_to = "";
+                var locations = [];
+                var point = {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": []
                     },
-                    filter: ['in', '$type', 'Point']
+                    "properties": {
+                        "id": null
+                    }
+                };
+                var response = [];
+                $(".loader").css({ 'display': 'hide' });
+
+                mapboxgl.accessToken = 'pk.eyJ1Ijoicmlkd2FucmFobWFuIiwiYSI6ImNrMTJjYXd5MjAwbzgzZGxscGM3c3l5dnYifQ.Dus70kgKra8qK4EbZFUR3Q';
+                var map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [144.95, -37.82], // starting position
+                    zoom: 11.5 // starting zoom
+                });
+                // Add zoom and rotation controls to the map.
+                map.addControl(new mapboxgl.NavigationControl());
+
+                var distanceContainer = document.getElementById('distance');
+                // GeoJSON object to hold our measurement features
+                var geojson = {
+                    "type": "FeatureCollection",
+                    "features": []
+                };
+
+                // Used to draw a line between points
+                var linestring = {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": []
+                    }
+                };
+
+                map.on('load', function () {
+                    map.addSource('geojson', {
+                        "type": "geojson",
+                        "data": geojson
+                    });
+                    // Add styles to the map
+                    map.addLayer({
+                        id: 'measure-points',
+                        type: 'circle',
+                        source: 'geojson',
+                        paint: {
+                            'circle-radius': 5,
+                            'circle-color': '#000'
+                        },
+                        filter: ['in', '$type', 'Point']
+                    });
+
+                    map.addLayer({
+                        id: 'measure-lines',
+                        type: 'line',
+                        source: 'geojson',
+                        layout: {
+                            'line-cap': 'round',
+                            'line-join': 'round'
+                        },
+                        paint: {
+                            'line-color': '#000',
+                            'line-width': 2.5
+                        },
+                        filter: ['in', '$type', 'LineString']
+                    });
+
+
+                    map.on('click', function (e) {
+                        var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
+                        console.log("herere");
+                        // Remove the linestring from the group
+                        // So we can redraw it based on the points collection
+                        if (geojson.features.length > 1) geojson.features.pop();
+                        // If a feature was clicked, remove it from the map
+                        if (features.length) {
+                            var id = features[0].properties.id;
+                            geojson.features = geojson.features.filter(function (point) {
+                                return point.properties.id !== id;
+                            });
+                        } else {
+                            point = {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [
+                                        e.lngLat.lng,
+                                        e.lngLat.lat
+                                    ]
+                                },
+                                "properties": {
+                                    "id": String(new Date().getTime())
+                                }
+                            };
+                            locations.push(point['geometry']['coordinates']);
+                            console.log(locations);
+                            geojson.features.push(point);
+                        }
+                        if (geojson.features.length > 1) {
+
+                            linestring.geometry.coordinates = geojson.features.map(function (point) {
+                                return point.geometry.coordinates;
+                            });
+                            geojson.features.push(linestring);
+                            // Populate the distanceContainer with total distance
+                            var value = document.createElement('pre');
+                            value.textContent = 'Total distance: ' + turf.lineDistance(linestring).toLocaleString() + 'km';
+                            $("#distance").html(value.textContent);
+                        }
+                        map.getSource('geojson').setData(geojson);
+                    });
                 });
 
-                map.addLayer({
-                    id: 'measure-lines',
-                    type: 'line',
-                    source: 'geojson',
-                    layout: {
-                        'line-cap': 'round',
-                        'line-join': 'round'
-                    },
-                    paint: {
-                        'line-color': '#000',
-                        'line-width': 2.5
-                    },
-                    filter: ['in', '$type', 'LineString']
-                });
-
-
-                map.on('click', function (e) {
+                map.on('mousemove', function (e) {
                     var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
-                    console.log("herere");
-                    // Remove the linestring from the group
-                    // So we can redraw it based on the points collection
-                    if (geojson.features.length > 1) geojson.features.pop();
-                    // If a feature was clicked, remove it from the map
-                    if (features.length) {
-                        var id = features[0].properties.id;
-                        geojson.features = geojson.features.filter(function (point) {
-                            return point.properties.id !== id;
-                        });
-                    } else {
-                        point = {
-                            "type": "Feature",
-                            "geometry": {
-                                "type": "Point",
-                                "coordinates": [
-                                    e.lngLat.lng,
-                                    e.lngLat.lat
-                                ]
-                            },
-                            "properties": {
-                                "id": String(new Date().getTime())
-                            }
-                        };
-                        locations.push(point['geometry']['coordinates']);
-                        console.log(locations);
-                        geojson.features.push(point);
-                    }
-                    if (geojson.features.length > 1) {
-
-                        linestring.geometry.coordinates = geojson.features.map(function (point) {
-                            return point.geometry.coordinates;
-                        });
-                        geojson.features.push(linestring);
-                        // Populate the distanceContainer with total distance
-                        var value = document.createElement('pre');
-                        value.textContent = 'Total distance: ' + turf.lineDistance(linestring).toLocaleString() + 'km';
-                        $("#distance").html(value.textContent);
-                    }
-                    map.getSource('geojson').setData(geojson);
+                    // UI indicator for clicking/hovering a point on the map
+                    map.getCanvas().style.cursor = (features.length) ? 'pointer' : 'crosshair';
                 });
-            });
+                map.on('mousemove', function (e) {
+                    document.getElementById('info').innerHTML =
+                        // e.point is the x, y coordinates of the mousemove event relative
+                        // to the top-left corner of the map
+                        JSON.stringify(e.point) + '<br />' +
+                        // e.lngLat is the longitude, latitude geographical position of the event
+                        JSON.stringify(e.lngLat.wrap());
+                });
 
-            map.on('mousemove', function (e) {
-                var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
-                // UI indicator for clicking/hovering a point on the map
-                map.getCanvas().style.cursor = (features.length) ? 'pointer' : 'crosshair';
-            });
-            map.on('mousemove', function (e) {
-                document.getElementById('info').innerHTML =
-                    // e.point is the x, y coordinates of the mousemove event relative
-                    // to the top-left corner of the map
-                    JSON.stringify(e.point) + '<br />' +
-                    // e.lngLat is the longitude, latitude geographical position of the event
-                    JSON.stringify(e.lngLat.wrap());
-            });
+                $.fn.myFunction = function () {
+                    console.log("booking constraint checker called");
+                    console.log(date_from);
+                    console.log(date_to);
+                    var target = this;
+                    var spinner = $(".loader");
+                    if (date_from.length > 0 && date_to.length > 0 && car_id > 0) {
+                        var dates = car_id + "," + date_from + "," + date_to;
+                        spinner.css({ "display": "block" });
+                        console.log("have both dates");
+                        $.ajax({
+                            type: "POST",
+                            dataType: 'text',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({ inputDates: JSON.stringify(dates) }),
+                            url: "/Customer/CheckBookingDate",
+                            success: function (result) {
+                                if (result == "\"already booked\"") {
+                                    spinner.css({ "display": "none" });
+                                    $("#date_from").val('');
+                                    $("#date_to").val('');
+                                    date_from = "";
+                                    date_to = "";
+                                    $("#modalTitle").html("Sorry!");
+                                    $("#modalBody").html("This car is already booked in the given date.");
+                                    $("#myModal").toggle('show');
+                                    //alert("this car is already booked in the given date");
+                                } else {
+                                    spinner.css({ "display": "none" });
+                                    $("#modalTitle").html("Great!");
+                                    $("#modalBody").html("This car can be booked on the given date. Please go ahead and select where you will drive to");
+                                    $("#myModal").toggle('show');
+                                    $("#map").css({
+                                        "display": "block",
+                                        "position": "relative",
+                                        "width": "100%"
+                                    });
+                                    map.resize();
+                                }
+                            }
+                        })
+                    } else {
+                        console.log("incomplete");
+                    }
+                }
+                $(".car_selection").click(function () {
+                    car_id = $(this).attr("value");
+                    alert("You have selected car with id " + car_id);
+                });
+                $("#date_from").datepicker({ format: 'dd/mm/yyyy', startDate: '0d' });
+                $("#date_from").change(function () {
+                    date_from = $(this).val();
+                    $.fn.myFunction();
+                });
+                $('#date_to').datepicker({ format: 'dd/mm/yyyy', startDate: '0d' });
+                $("#date_to").change(function () {
+                    date_to = $(this).val();
+                    $.fn.myFunction();
+                });
 
-            $.fn.myFunction = function () {
-                console.log("booking constraint checker called");
-                console.log(date_from);
-                console.log(date_to);
-                var target = this;
-                var spinner = $(".loader");
-                if (date_from.length > 0 && date_to.length > 0 && car_id > 0) {
-                    var dates = car_id + "," + date_from + "," + date_to;
-                    spinner.css({ "display": "block" });
-                    console.log("have both dates");
+                $("#show_data").click(function () {
+                    response.push(date_from);
+                    response.push(date_to);
+                    response.push(car_id);
+                    response.push(locations);
+                    /*
                     $.ajax({
                         type: "POST",
                         dataType: 'text',
                         contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify({ inputDates: JSON.stringify(dates) }),
-                        url: "/Customer/CheckBookingDate",
+                        data: JSON.stringify({ sendInfo: JSON.stringify(response) }),
+                        url: "/Customer/CreateBooking",
                         success: function (result) {
-                            if (result == "\"already booked\"") {
-                                spinner.css({ "display": "none" });
-                                $("#date_from").val('');
-                                $("#date_to").val('');
-                                date_from = "";
-                                date_to = "";
-                                alert("this car is already booked in the given date");
-                            } else {
-
-                                alert("booking will be created");
-                                $("#map").css({
-                                    "display": "block",
-                                    "position": "relative",
-                                    "width": "100%"
-                                });
-                                map.resize();
-                                spinner.css({ "display": "none" });
+                            if (result == "\"success\"") {
+                                console.log("received");
+                            }
+                            else {
+                                console.log("need more work");
                             }
                         }
-                    })
-                } else {
-                    console.log("incomplete");
-                }
-            }
-            $(".car_selection").click(function () {
-                car_id = $(this).attr("value");
-                alert("You have selected car with id " + car_id);
-            });
-            $("#date_from").datepicker({ format: 'dd/mm/yyyy', startDate: '0d' });
-            $("#date_from").change(function () {
-                date_from = $(this).val();
-                $.fn.myFunction();
-            });
-            $('#date_to').datepicker({ format: 'dd/mm/yyyy', startDate: '0d' });
-            $("#date_to").change(function () {
-                date_to = $(this).val();
-                $.fn.myFunction();
-            });
-
-            $("#show_data").click(function () {
-                response.push(date_from);
-                response.push(date_to);
-                response.push(car_id);
-                response.push(locations);
-                $.ajax({
-                    type: "POST",
-                    dataType: 'text',
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({ sendInfo: JSON.stringify(response) }),
-                    url: "/Customer/CreateBooking",
-                    success: function (result) {
-                        if (result == "\"success\"") {
-                            console.log("received");
-                        }
-                        else {
-                            console.log("need more work");
-                        }
-                    }
+                    }) */
                 })
             })
-        })
-    </script>
-</div>
+        </script>
+    </div>
