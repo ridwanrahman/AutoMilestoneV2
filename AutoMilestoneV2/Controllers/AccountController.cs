@@ -418,6 +418,12 @@ namespace AutoMilestoneV2.Controllers
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
+
+                    using (Entities3 db = new Entities3())
+                    {
+                        db.Database.ExecuteSqlCommand("insert into [dbo].[userrolesbridging]([UserId], [RoleId]) values ('" + user.Id + "',3);");
+                    }
+
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);

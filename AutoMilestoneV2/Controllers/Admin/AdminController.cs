@@ -59,10 +59,26 @@ namespace AutoMilestoneV2.Controllers.Admin
         }
 
         [HttpPost]
-        public ActionResult SendEmail(EmailViewModel emailMessage)
+        public async Task<ActionResult> SendEmailAsync(EmailViewModel emailMessage)
         {
             Console.WriteLine(emailMessage);
+            try
+            {
+                String to = emailMessage.messageTo;
+                String messageSubject = emailMessage.messageSubject;
+                String messageBody = emailMessage.messageBody;
+                EmailSenderClass es = new EmailSenderClass();
+                // var statusCode = await es.Send(to, messageSubject, messageBody);
+                es.Send(to, messageSubject, messageBody);
+                ViewBag.Result = "success";
+            }
+            catch(Exception e)
+            {
+                
+            }
             return View();
         }
     }
 }
+
+//api key: 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

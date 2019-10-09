@@ -7,10 +7,10 @@
 
 <h2>SendEmail</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>EmailViewModel</h4>
         <hr />
@@ -18,7 +18,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.messageTo, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.messageTo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.messageTo, new { htmlAttributes = new { @class = "form-control",id="messageTo" } })
                 @Html.ValidationMessageFor(model => model.messageTo, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -26,7 +26,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.messageSubject, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.messageSubject, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.messageSubject, new { htmlAttributes = new { @class = "form-control",id="messageSubject" } })
                 @Html.ValidationMessageFor(model => model.messageSubject, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -34,7 +34,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.messageBody, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.messageBody, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.messageBody, new { htmlAttributes = new { @class = "form-control", id="messageBody" } })
                 @Html.ValidationMessageFor(model => model.messageBody, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -50,3 +50,44 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="modalTitle">@ViewBag.Result</h4>
+            </div>
+            <div class="modal-body">
+                <p id="modalText">Email has been sent</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script>
+        $(document).ready(function () {
+            $("#messageTo").val("");
+            $("#messageSubject").val("");
+            $("#messageBody").val("");
+            var val = '@(ViewBag.Result)';
+            if (val === 'success') {
+                $('#myModal').modal('toggle');
+            } else {
+                //alert("error");
+
+            }
+            
+    })
+    </script>
+
+}
