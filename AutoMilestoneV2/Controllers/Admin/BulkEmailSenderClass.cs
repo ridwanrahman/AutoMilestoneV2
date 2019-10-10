@@ -14,12 +14,26 @@ namespace AutoMilestoneV2.Controllers.Admin
         public void send(String toEmail, String messageSubject, 
             String messageBody, String fullPath)
         {
-            var client = new SendGridClient(API_KEY);
-            var to_emails = new List<EmailAddress>
+            string[] emailAddresses = toEmail.Split(',');
+
+            /*
+            for(int i=0;i<emailAddresses.Length;i++)
             {
-                new EmailAddress(toEmail, "Example User1"),
-                new EmailAddress("ridwan_rahman@ymail.com", "Example User2")
+                var to_emails = new List<EmailAddress>
+                {
+                    new EmailAddress(emailAddresses[i], "Application")
+                };
+            };*/
+
+            var client = new SendGridClient(API_KEY);
+
+            
+            var to_emails = new List<EmailAddress>();
+            for(int i=0;i<emailAddresses.Length;i++)
+            {
+                to_emails.Add(new EmailAddress(emailAddresses[i], "User"));
             };
+
             var msg = new SendGridMessage();
             msg.SetFrom("ridwanrahman07@gmail.com", "FIT5032 BULK EMAIL");
             var plainTextContent = messageBody;

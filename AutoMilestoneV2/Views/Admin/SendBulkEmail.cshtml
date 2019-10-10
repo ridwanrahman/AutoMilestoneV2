@@ -4,6 +4,7 @@
     ViewBag.Title = "SendBulkEmail";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap2.css" />
 
 <h2>SendBulkEmail</h2>
 
@@ -19,7 +20,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.messageTo, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.messageTo, new { htmlAttributes = new { @class = "form-control", id = "messageTo" } })
+                <input type="text" id="messageTo" name="messageTo"/>
                 @Html.ValidationMessageFor(model => model.messageTo, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -60,11 +61,13 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.js"></script>
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
-
     <script>
         $(document).ready(function () {
+            var emails = "";
+            //var selectize = "";
             $("#messageTo").val("");
             $("#messageSubject").val("");
             $("#messageBody").val("");
@@ -73,10 +76,24 @@
                 $('#myModal').modal('toggle');
             } else {
                 //alert("error");
-
             }
+            var $select = $('#messageTo').selectize({
+                delimiter: ',',
+                persist: false,
+                create: function (input) {
+                    return {
+                        value: input,
+                        text: input
+                    }                    
+                }
+            });
+            console.log($select);
+            var selectize = $select[0].selectize;
+            selectize.on('change', function () {
+                var test = selectize.getValue();
+                $("#messageTo").val(test);
+            });
+
         })
     </script>
-
-
 }

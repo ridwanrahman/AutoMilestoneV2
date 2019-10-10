@@ -105,7 +105,14 @@ namespace AutoMilestoneV2.Controllers
                     {
                         return RedirectToAction("Index", "Staff");
                     }
-                    return RedirectToAction("Index", "Customer");
+                    if(role[0] == "Customer")
+                    {
+                        return RedirectToAction("Index", "Customer");
+                    }
+                    else
+                    {
+                        return null;
+                    }
                     //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
