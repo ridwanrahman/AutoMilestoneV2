@@ -144,4 +144,10 @@ namespace AutoMilestoneV2.Models
         [Display(Name ="File")]
         public HttpPostedFileBase attachment { get; set; }
     }
+
+    public class CustomerBookingTestModel
+    {
+        public double distance { get; set; }
+        public double price { get; set; }
+    }
 }

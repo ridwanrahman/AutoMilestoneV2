@@ -48,18 +48,32 @@ namespace AutoMilestoneV2.Controllers.Customer
             DateTime date_to_date = Convert.ToDateTime(date_to_converted);
             using(var context = new Entities3())
             {
-                var isBooked = (from c in context.CustomerBookings
-                                where c.from_date >= date_from_date && 
+                /*var isBooked = (from c in context.CustomerBookings where 
+                                (c.from_date >= date_from_date and c.<=date_to_date) or 
                                 c.to_date <= date_to_date && c.vehicle_id == car_id
-                                select c.customer_booking_id).ToList();
+                                select c.customer_booking_id).ToList(); */
 
-                if (isBooked.Count > 0)
+                try
                 {
-                    response = "already booked";
+                    var isBooked = (from c in context.CustomerBookings
+                                    where (c.from_date >= date_from_date && c.from_date <= date_to_date) ||
+                                            (c.to_date >= date_to_date && c.to_date <= date_to_date) ||
+                                                (c.from_date <= date_from_date && c.to_date >= date_to_date) &&
+                                    c.vehicle_id == car_id
+                                    select c.vehicle_id).ToList();
+                    Console.WriteLine(isBooked);
+                    if (isBooked.Count > 0)
+                    {
+                        response = "already booked";
+                    }
+                    else
+                    {
+                        response = "not booked";
+                    }
                 }
-                else
+                catch(Exception e)
                 {
-                    response = "not booked";
+                    Console.WriteLine(e);
                 }
             }
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -70,11 +84,13 @@ namespace AutoMilestoneV2.Controllers.Customer
         public JsonResult CreateBooking(string sendInfo)
         {
             string userId = User.Identity.GetUserId();
-            string date_from;
-            string date_to;
+            //string date_from;
+            //string date_to;
             string car_id;
             string latitude;
             string longitude;
+            double distance = 0.0;
+            double price = 0.0;
             
             List<LocationModel> location = new List<LocationModel>();
             String[] spearator = { ","};
@@ -83,24 +99,40 @@ namespace AutoMilestoneV2.Controllers.Customer
             {
                 Console.WriteLine(result);
             }
-            date_from = result[0].Trim('\t', '[','"');
-            date_to = result[1].Trim('\t', '[', '"');
+            //date_from = result[0].Trim('\t', '[','"');
+            //date_to = result[1].Trim('\t', '[', '"');
+
+            //convert to date time type
+            //DateTime date_from_dateType = Convert.ToDateTime(result[0].Trim('\t', '[', '"'));
+            //DateTime date_to_dateType = Convert.ToDateTime(result[1].Trim('\t', '[', '"'));
+
+            DateTime date_from = Convert.ToDateTime(result[0].Trim('\t', '[', '"'));
+            DateTime date_to = Convert.ToDateTime(result[1].Trim('\t', '[', '"'));
+            var date_from_converted = date_from.ToString("yyyy-MM-dd");
+            var date_to_converted = date_to.ToString("yyyy-MM-dd");
+            DateTime date_from_date = Convert.ToDateTime(date_from_converted);
+            DateTime date_to_date = Convert.ToDateTime(date_to_converted);
+
+
 
             car_id = result[2].Trim('\t', '[', '"');
+            var abc = result[3].Trim('\t', '[', '"');
+            distance = Convert.ToDouble(abc);
             var vehicle_id = Int32.Parse(car_id);
+            price = distance * 3;
             try
             {
                 using (var context = new Entities3())
                 {
                     context.Database.ExecuteSqlCommand("insert into " +
                         "[dbo].[CustomerBooking]([userId],[vehicle_id]," +
-                        "[isAccepted],[to_date],[from_date],[pickup_location],[dropoff_location]) " +
-                        "values('" + userId + "', '" + car_id + "', 'false', '" + date_to + "'," +
-                        "'" + date_from + "','location1','location2')");
+                        "[isAccepted],[to_date],[from_date],[pickup_location],[dropoff_location],[distance],[price]) " +
+                        "values('" + userId + "', '" + car_id + "', 'false', '" + date_to_converted + "'," +
+                        "'" + date_from_converted + "','location1','location2', '"+distance+"', '"+price+"')");
                     var lastId = (from c in context.CustomerBookings
                                   where c.userId == userId && c.vehicle_id == vehicle_id
                                   select c.customer_booking_id).ToArray();
-                    for (int i = 3; i <= result.Length - 2; i = i + 2)
+                    for (int i = 4; i <= result.Length - 2; i = i + 2)
                     {
                         latitude = result[i].Trim('[', ']');
                         int j = i;

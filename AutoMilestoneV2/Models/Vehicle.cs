@@ -20,7 +20,7 @@ namespace AutoMilestoneV2.Models
             this.CustomerBookings = new HashSet<CustomerBooking>();
         }
     
-        public int Id { get; set; }
+        public int Id { get; set; }        
         public string Name { get; set; }
         public string Model { get; set; }
         public string userId { get; set; }

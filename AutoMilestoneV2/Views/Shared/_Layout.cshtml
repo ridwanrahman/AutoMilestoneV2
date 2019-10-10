@@ -31,7 +31,18 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    @Html.ActionLink("Dashboard", "Index", "Customer", new { area = "" }, new { @class = "navbar-brand" })
+                    @if (ViewBag.message == "Admin")
+                    {
+                        @Html.ActionLink("Dashboard", "Index", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+                    else if (ViewBag.message == "Staff")
+                    {
+                        @Html.ActionLink("Dashboard", "Index", "Staff", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Dashboard", "Index", "Customer", new { area = "" }, new { @class = "navbar-brand" })
+                    }
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">

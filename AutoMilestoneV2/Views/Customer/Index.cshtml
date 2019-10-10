@@ -99,7 +99,6 @@
     <div class="jumbotron">
         <h1>AutoMilestone</h1>
         <p class="lead">Select from our wide range of cars</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
     </div>
     <div>
         Available cars
@@ -118,6 +117,7 @@
             <div class="col-md-4 mb-3">
                 <label for="to">to</label>
                 <input type="text" id="date_to" value="" name="to" />
+                <input type="hidden" id="distance_thing" value=""/>
             </div>
             <div class="loader"></div>
             <br />
@@ -153,6 +153,8 @@
             var date_from = "";
             var date_to = "";
             var locations = [];
+            var price = 0;
+            var distance = 0;
             var point = {
                 "type": "Feature",
                 "geometry": {
@@ -224,7 +226,6 @@
                     filter: ['in', '$type', 'LineString']
                 });
 
-
                 map.on('click', function (e) {
                     var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
                     console.log("herere");
@@ -265,6 +266,7 @@
                         var value = document.createElement('pre');
                         value.textContent = 'Total distance: ' + turf.lineDistance(linestring).toLocaleString() + 'km';
                         $("#distance").html(value.textContent);
+                        $("#distance_thing").val(turf.lineDistance(linestring).toLocaleString());
                     }
                     map.getSource('geojson').setData(geojson);
                 });
@@ -286,8 +288,6 @@
 
             $.fn.myFunction = function () {
                 console.log("booking constraint checker called");
-                console.log(date_from);
-                console.log(date_to);
                 var target = this;
                 var spinner = $(".loader");
                 if (date_from.length > 0 && date_to.length > 0 && car_id > 0) {
@@ -348,8 +348,11 @@
                 response.push(date_from);
                 response.push(date_to);
                 response.push(car_id);
+                distance = $("#distance_thing").val();
+                response.push(distance);
                 response.push(locations);
-                /*
+                console.log(locations);
+                                
                 $.ajax({
                     type: "POST",
                     dataType: 'text',
@@ -359,12 +362,13 @@
                     success: function (result) {
                         if (result == "\"success\"") {
                             console.log("received");
+                            alert("recieved");
                         }
                         else {
                             console.log("need more work");
                         }
                     }
-                }) */
+                })
             })
         })
     </script>
