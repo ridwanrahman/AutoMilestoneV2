@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using AutoMilestoneV2.Controllers;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace AutoMilestoneV2.Controllers.Admin
 {
@@ -43,6 +44,7 @@ namespace AutoMilestoneV2.Controllers.Admin
                 {
                     db.Database.ExecuteSqlCommand("insert into [dbo].[userrolesbridging]([UserId], [RoleId]) values ('" + user.Id + "',2);");
                 }
+                ModelState.Clear();
                 ViewBag.Message = "success";
                 return View();
             }
@@ -59,24 +61,47 @@ namespace AutoMilestoneV2.Controllers.Admin
         }
 
         [HttpPost]
-        public async Task<ActionResult> SendEmailAsync(EmailViewModel emailMessage)
+        public ActionResult SendEmail(EmailViewModel emailMessage)
         {
-            Console.WriteLine(emailMessage);
-            try
+            if(emailMessage.messageTo == null || emailMessage.messageSubject == null ||
+                emailMessage.messageBody == null)
             {
-                String to = emailMessage.messageTo;
-                String messageSubject = emailMessage.messageSubject;
-                String messageBody = emailMessage.messageBody;
-                EmailSenderClass es = new EmailSenderClass();
-                // var statusCode = await es.Send(to, messageSubject, messageBody);
-                es.Send(to, messageSubject, messageBody);
-                ViewBag.Result = "success";
+                ViewBag.Result = "error";
+                return View();
             }
-            catch(Exception e)
+            else
             {
-                
+                try
+                {
+
+                    String to = emailMessage.messageTo;
+                    String messageSubject = emailMessage.messageSubject;
+                    String messageBody = emailMessage.messageBody;
+                    EmailSenderClass es = new EmailSenderClass();
+
+                    if(emailMessage.attachment != null)
+                    {
+                        string path = Server.MapPath("~/App_Data/File");
+                        string fileName = Path.GetFileName(emailMessage.attachment.FileName);
+                        string fullPath = Path.Combine(path, fileName);
+                        emailMessage.attachment.SaveAs(fullPath);
+                        es.Send(to, messageSubject, messageBody, fullPath);
+                    }
+                    else
+                    {
+                        es.Send(to, messageSubject, messageBody, "nothing");
+                    }
+                    
+                    ViewBag.Result = "success";
+
+                }
+                catch (Exception e)
+                {
+
+                }
+                return View();
+
             }
-            return View();
         }
     }
 }

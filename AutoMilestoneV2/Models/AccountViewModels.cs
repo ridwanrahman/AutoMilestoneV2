@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace AutoMilestoneV2.Models
 {
@@ -115,8 +116,15 @@ namespace AutoMilestoneV2.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name = "Email Address")]
+        [Required]
         public string messageTo { get; set; }
+        [Display(Name = "Subject")]
+        [Required]        
         public string messageSubject { get; set; }
+        [Display(Name = "Message")]
+        [Required]
         public string messageBody { get; set; }
+        public HttpPostedFileBase attachment { get; set; }
     }
 }
