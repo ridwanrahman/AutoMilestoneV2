@@ -10,13 +10,16 @@ using Newtonsoft.Json.Linq;
 
 namespace AutoMilestoneV2.Controllers.Customer
 {
+    [Authorize(Roles = "Customer")]
     [RequireHttps]
     public class CustomerController : Controller
     {
+        
         public ActionResult Index2()
         {
             return View();
         }
+        [Authorize(Roles = "Customer")]
         // GET: Customer
         public ActionResult Index()
         {
@@ -29,6 +32,7 @@ namespace AutoMilestoneV2.Controllers.Customer
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public JsonResult CheckBookingDate(string inputDates)
         {
@@ -61,6 +65,7 @@ namespace AutoMilestoneV2.Controllers.Customer
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public JsonResult CreateBooking(string sendInfo)
         {

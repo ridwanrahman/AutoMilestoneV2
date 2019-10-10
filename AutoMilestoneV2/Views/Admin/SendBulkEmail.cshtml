@@ -8,7 +8,6 @@
 
 <h2>SendBulkEmail</h2>
 
-
 @using (Html.BeginForm("SendBulkEmail", "Admin", FormMethod.Post, new { @enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
@@ -55,7 +54,6 @@
         </div>
     </div>
 }
-
 <div>
     @Html.ActionLink("Back to Dashboard", "Index")
 </div>
@@ -67,7 +65,6 @@
     <script>
         $(document).ready(function () {
             var emails = "";
-            //var selectize = "";
             $("#messageTo").val("");
             $("#messageSubject").val("");
             $("#messageBody").val("");
@@ -75,7 +72,6 @@
             if (val === 'success') {
                 $('#myModal').modal('toggle');
             } else {
-                //alert("error");
             }
             var $select = $('#messageTo').selectize({
                 delimiter: ',',
@@ -93,7 +89,6 @@
                 var test = selectize.getValue();
                 $("#messageTo").val(test);
             });
-
         })
     </script>
 }

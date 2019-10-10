@@ -3,29 +3,45 @@
     ViewBag.Title = "ViewFleet";
     Layout = "~/Views/Shared/StaffLayout.cshtml";
 }
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 <h2>ViewFleet</h2>
-<body>
-    <table class="table">
+
+    <table class="table stripe" id="vehicleTable">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                
                 <th scope="col">Name</th>
-                <th scope="col">Model</th>
-                <th scope="col">Image</th>
+                <th scope="col">Model/Year</th>
+                <th scope="col">Description</th>
             </tr>
         </thead>
         <tbody>
-            @foreach(var data in ViewBag.ItemData)
+            
+            @foreach (var data in ViewBag.ItemData)
             {
                 <tr>
-                    <th scope="row"></th>
+                                    
                     <td>@data.Name</td>
                     <td>@data.Model</td>
-                    <td>mdo</td>
+                    <td>@data.vehicle_description</td>
+                    
                 </tr>
             }
         </tbody>
 
-</body>
+@section scripts{
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $("#vehicleTable").DataTable();
+            });
+        </script>
+    }
+
+
+
 

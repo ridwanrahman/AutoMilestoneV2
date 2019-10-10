@@ -129,11 +129,11 @@ namespace AutoMilestoneV2.Controllers.Admin
                         string fileName = Path.GetFileName(emailMessage.attachment.FileName);
                         string fullPath = Path.Combine(path, fileName);
                         emailMessage.attachment.SaveAs(fullPath);
-                        bs.send(to, messageSubject, messageBody, fullPath);
+                        bs.send(to, messageSubject, messageBody, fullPath, fileName);
                     }
                     else
                     {
-                        bs.send(to, messageSubject, messageBody, "nothing");
+                        bs.send(to, messageSubject, messageBody, "nothing", "nothing");
                     }
                     ModelState.Clear();
                     ViewBag.Result = "success";
@@ -148,5 +148,4 @@ namespace AutoMilestoneV2.Controllers.Admin
         }
     }
 }
-
 //api key: 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
