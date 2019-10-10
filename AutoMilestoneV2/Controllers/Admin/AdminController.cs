@@ -73,12 +73,10 @@ namespace AutoMilestoneV2.Controllers.Admin
             {
                 try
                 {
-
                     String to = emailMessage.messageTo;
                     String messageSubject = emailMessage.messageSubject;
                     String messageBody = emailMessage.messageBody;
                     EmailSenderClass es = new EmailSenderClass();
-
                     if(emailMessage.attachment != null)
                     {
                         string path = Server.MapPath("~/App_Data/File");
@@ -93,14 +91,59 @@ namespace AutoMilestoneV2.Controllers.Admin
                     }
                     
                     ViewBag.Result = "success";
-
                 }
                 catch (Exception e)
                 {
 
                 }
                 return View();
+            }
+        }
+        
+        public ActionResult SendBulkEmail()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult SendBulkEmail(BulkEmailViewModel emailMessage)
+        {
+            if (emailMessage.messageTo == null || emailMessage.messageSubject == null ||
+                emailMessage.messageBody == null)
+            {
+                ViewBag.Result = "error";
+                return View();
+            }
+            else
+            {
+                try
+                {
+                    String to = emailMessage.messageTo;
+                    String messageSubject = emailMessage.messageSubject;
+                    String messageBody = emailMessage.messageBody;
+                    BulkEmailSenderClass bs = new BulkEmailSenderClass();
+                                        
+                    if(emailMessage.attachment != null)
+                    {
+                        string path = Server.MapPath("~/App_Data/File");
+                        string fileName = Path.GetFileName(emailMessage.attachment.FileName);
+                        string fullPath = Path.Combine(path, fileName);
+                        emailMessage.attachment.SaveAs(fullPath);
+                        bs.send(to, messageSubject, messageBody, fullPath);
+                    }
+                    else
+                    {
+                        bs.send(to, messageSubject, messageBody, "nothing");
+                    }
+                    ModelState.Clear();
+                    ViewBag.Result = "success";
+                    return View();
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Result = "error";
+                    return View();
+                }
             }
         }
     }

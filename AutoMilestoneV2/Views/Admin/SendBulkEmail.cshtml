@@ -1,20 +1,19 @@
-﻿@model AutoMilestoneV2.Models.EmailViewModel
+﻿@model AutoMilestoneV2.Models.BulkEmailViewModel
 
 @{
-    ViewBag.Title = "SendEmail";
+    ViewBag.Title = "SendBulkEmail";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h2>SendEmail</h2>
+<h2>SendBulkEmail</h2>
 
 
-
-@using (Html.BeginForm("SendEmail", "Admin", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+@using (Html.BeginForm("SendBulkEmail", "Admin", FormMethod.Post, new { @enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>EmailViewModel</h4>
+        <h4>BulkEmailViewModel</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -44,7 +43,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.attachment, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="file" id="attachment" name="attachment">
+                <input type="file" id="attachment" name="attachment" />
             </div>
         </div>
 
@@ -63,8 +62,9 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
+
     <script>
-            $(document).ready(function () {                
+        $(document).ready(function () {
             $("#messageTo").val("");
             $("#messageSubject").val("");
             $("#messageBody").val("");
@@ -75,7 +75,8 @@
                 //alert("error");
 
             }
-
-    })
+        })
     </script>
+
+
 }
