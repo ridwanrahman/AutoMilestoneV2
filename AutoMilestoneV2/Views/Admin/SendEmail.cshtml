@@ -28,7 +28,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.messageSubject, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.messageSubject, new { htmlAttributes = new { @class = "form-control", id = "messageSubject" } })
+                @Html.EditorFor(model => model.messageSubject, new { htmlAttributes = new { @class = "form-control", @id = "messageSubject" } })
                 @Html.ValidationMessageFor(model => model.messageSubject, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -56,6 +56,26 @@
     </div>
 }
 
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle">Success!</h4>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body" id="modalBody">
+                Email has been sent successfully
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div>
     @Html.ActionLink("Back to Dashboard", "Index")
 </div>
@@ -64,12 +84,16 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
     <script>
-            $(document).ready(function () {                
+        $(document).ready(function () {
+            tinymce.init({
+                selector: "#messageBody"
+            });
             $("#messageTo").val("");
             $("#messageSubject").val("");
             $("#messageBody").val("");
             var val = '@(ViewBag.Result)';
             if (val === 'success') {
+                console.log(val);
                 $('#myModal').modal('toggle');
             } else {
                 //alert("error");

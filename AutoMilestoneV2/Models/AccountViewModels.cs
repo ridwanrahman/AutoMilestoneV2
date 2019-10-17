@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using System.Web.Mvc;
 
 namespace AutoMilestoneV2.Models
 {
@@ -78,7 +79,7 @@ namespace AutoMilestoneV2.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
         public string isStaff { get; set; }
     }
@@ -98,7 +99,7 @@ namespace AutoMilestoneV2.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
@@ -123,6 +124,7 @@ namespace AutoMilestoneV2.Models
         [Required]        
         public string messageSubject { get; set; }
         [Display(Name = "Message")]
+        [AllowHtml]
         [Required]
         public string messageBody { get; set; }
         public HttpPostedFileBase attachment { get; set; }

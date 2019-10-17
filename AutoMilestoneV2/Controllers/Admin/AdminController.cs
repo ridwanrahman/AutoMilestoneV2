@@ -94,7 +94,7 @@ namespace AutoMilestoneV2.Controllers.Admin
                 }
                 catch (Exception e)
                 {
-
+                    ViewBag.Result = "error";
                 }
                 return View();
             }

@@ -37,10 +37,9 @@ namespace AutoMilestoneV2.Controllers.Admin
                 var htmlContent = "<p>" + plainTextContent + "</p>";
                 var msg = MailHelper.CreateSingleEmail(from, to, messageSubject,
                                                         plainTextContent, htmlContent);
-                msg.AddAttachment("Attachment", file);
+                msg.AddAttachment(fullPath, file);
                 var response = client.SendEmailAsync(msg);
             }
         }
-
     }
 }
