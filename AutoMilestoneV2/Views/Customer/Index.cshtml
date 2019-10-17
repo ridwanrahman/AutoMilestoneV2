@@ -37,6 +37,10 @@
         left: 10px;
         z-index: 1;
     }
+    .modal-backdrop {
+        z-index: -1;
+
+    }
 
         .distance-container > * {
             background-color: rgba(0, 0, 0, 0.5);
@@ -93,6 +97,29 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" id="myModal2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalTitle2"></h4>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body" id="modalBody2">
+
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="close2">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <br />
     <br />
     <br />
@@ -112,12 +139,12 @@
         <div class="form-row">
             <div class="col-md-4 mb-3">
                 <label for="from">From</label>
-                <input type="text" value="" id="date_from" name="from" autocomplete="off"/>
+                <input type="text" value="" id="date_from" name="from" autocomplete="off" />
             </div>
             <div class="col-md-4 mb-3">
                 <label for="to">to</label>
-                <input type="text" id="date_to" value="" name="to" autocomplete="off"/>
-                <input type="hidden" id="distance_thing" value=""/>
+                <input type="text" id="date_to" value="" name="to" autocomplete="off" />
+                <input type="hidden" id="distance_thing" value="" />
             </div>
             <div class="loader"></div>
             <br />
@@ -129,7 +156,7 @@
             </div>
         </div>
         <div class="col-md-4 mb-3">
-            <button type="button" id ="show_data" data-loading-text="Loading..." class="btn btn-primary">
+            <button type="button" id="show_data" data-loading-text="Loading..." class="btn btn-primary">
                 show data
             </button>
             <!--<p><a href="#" class="btn btn-primary btn-lg" id="modalbutton">Done</a></p>-->
@@ -345,6 +372,10 @@
                 date_to = $(this).val();
                 $.fn.myFunction();
             });
+            $("#close2").click(function () {
+                alert("pressed");
+                location.reload();
+            })
 
             $("#show_data").click(function () {
                 var $btn = $(this).button('loading')
@@ -361,14 +392,14 @@
                     data: JSON.stringify({ sendInfo: JSON.stringify(response) }),
                     url: "/Customer/CreateBooking",
                     success: function (result) {
-                        var str = jQuery.parseJSON(result);                        
+                        var str = jQuery.parseJSON(result);
                         var abc = jQuery.parseJSON(str);
                         if (abc.response == "success") {
                             console.log("received");
                             $btn.button('reset');
-                            $("#modalTitle").html(abc.response);
-                            $("#modalBody").html(abc.message + "Your price is " + abc.price + "Total distance is: " + abc.distance+"");
-                            $("#myModal").toggle('show');
+                            $("#modalTitle2").html(abc.response);
+                            $("#modalBody2").html(abc.message + "Your price is " + abc.price + "Total distance is: " + abc.distance + "");
+                            $("#myModal2").toggle('show');
                         }
                         else {
                             alert("We are facing errors. Please standby");
