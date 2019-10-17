@@ -112,11 +112,11 @@
         <div class="form-row">
             <div class="col-md-4 mb-3">
                 <label for="from">From</label>
-                <input type="text" value="" id="date_from" name="from" />
+                <input type="text" value="" id="date_from" name="from" autocomplete="off"/>
             </div>
             <div class="col-md-4 mb-3">
                 <label for="to">to</label>
-                <input type="text" id="date_to" value="" name="to" />
+                <input type="text" id="date_to" value="" name="to" autocomplete="off"/>
                 <input type="hidden" id="distance_thing" value=""/>
             </div>
             <div class="loader"></div>
@@ -129,8 +129,10 @@
             </div>
         </div>
         <div class="col-md-4 mb-3">
-            <button id="show_data">show data</button>
-            <p><a href="#" class="btn btn-primary btn-lg" id="modalbutton">Done</a></p>
+            <button type="button" id ="show_data" data-loading-text="Loading..." class="btn btn-primary">
+                show data
+            </button>
+            <!--<p><a href="#" class="btn btn-primary btn-lg" id="modalbutton">Done</a></p>-->
         </div>
     </div>
 
@@ -345,14 +347,13 @@
             });
 
             $("#show_data").click(function () {
+                var $btn = $(this).button('loading')
                 response.push(date_from);
                 response.push(date_to);
                 response.push(car_id);
                 distance = $("#distance_thing").val();
                 response.push(distance);
                 response.push(locations);
-                console.log(locations);
-                                
                 $.ajax({
                     type: "POST",
                     dataType: 'text',
@@ -360,12 +361,17 @@
                     data: JSON.stringify({ sendInfo: JSON.stringify(response) }),
                     url: "/Customer/CreateBooking",
                     success: function (result) {
-                        if (result == "\"success\"") {
+                        var str = jQuery.parseJSON(result);                        
+                        var abc = jQuery.parseJSON(str);
+                        if (abc.response == "success") {
                             console.log("received");
-                            alert("recieved");
+                            $btn.button('reset');
+                            $("#modalTitle").html(abc.response);
+                            $("#modalBody").html(abc.message + "Your price is " + abc.price + "Total distance is: " + abc.distance+"");
+                            $("#myModal").toggle('show');
                         }
                         else {
-                            console.log("need more work");
+                            alert("We are facing errors. Please standby");
                         }
                     }
                 })

@@ -34,7 +34,9 @@
         <h2>MAP</h2>
         @foreach (var data in ViewBag.customerBookingLocations)
         {
-            @data.longitude @data.latitude <br />
+            <text>value="@data.longitude"</text>
+            <text>value="@data.latitude"</text>
+            <br />
         }
 
         <div id='map_simple' class='map'> </div>
@@ -52,6 +54,14 @@
 {
     <script>
         $(document).ready(function () {
+
+            var locations = [];
+
+            $("#text").each(function () {
+                console.log("assdf");
+            })
+
+
 
 
             mapboxgl.accessToken = 'pk.eyJ1Ijoicmlkd2FucmFobWFuIiwiYSI6ImNrMTZnaHZ3NTE0Zm4zbHRqNTByZ3VibnYifQ.iE2lQobcq1MppwG49nkyXg';

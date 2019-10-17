@@ -35,7 +35,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.messageBody, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.messageBody, new { htmlAttributes = new { @class = "form-control", id = "messageBody" } })
+                @Html.EditorFor(model => model.messageBody, new { htmlAttributes = new { @class = "form-control", @id = "messageBody" } })
                 @Html.ValidationMessageFor(model => model.messageBody, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -54,6 +54,29 @@
         </div>
     </div>
 }
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle">Success!</h4>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body" id="modalBody">
+                Email has been sent to all users successfully
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <div>
     @Html.ActionLink("Back to Dashboard", "Index")
 </div>
@@ -64,6 +87,9 @@
     @Scripts.Render("~/bundles/bootstrap")
     <script>
         $(document).ready(function () {
+            tinymce.init({
+                selector: "#messageBody"
+            });
             var emails = "";
             $("#messageTo").val("");
             $("#messageSubject").val("");

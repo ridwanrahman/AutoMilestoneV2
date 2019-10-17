@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AutoMilestoneV2.Models;
+using Microsoft.AspNet.Identity;
 
 namespace AutoMilestoneV2.Controllers.Staff
 {
@@ -48,10 +49,11 @@ namespace AutoMilestoneV2.Controllers.Staff
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Model,userId,image_path,vehicle_description")] Vehicle vehicle)
+        public ActionResult Create([Bind(Include = "Id,Name,Model,image_path,vehicle_description")] Vehicle vehicle)
         {
             if (ModelState.IsValid)
             {
+                vehicle.userId = User.Identity.GetUserId();
                 db.Vehicles.Add(vehicle);
                 db.SaveChanges();
                 return RedirectToAction("Index");

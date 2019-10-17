@@ -4,8 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using AutoMilestoneV2.Models;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace AutoMilestoneV2.Controllers.Customer
@@ -56,9 +58,9 @@ namespace AutoMilestoneV2.Controllers.Customer
                 try
                 {
                     var isBooked = (from c in context.CustomerBookings
-                                    where (c.from_date >= date_from_date && c.from_date <= date_to_date) ||
+                                    where ((c.from_date >= date_from_date && c.from_date <= date_to_date) ||
                                             (c.to_date >= date_to_date && c.to_date <= date_to_date) ||
-                                                (c.from_date <= date_from_date && c.to_date >= date_to_date) &&
+                                                (c.from_date <= date_from_date && c.to_date >= date_to_date)) &&
                                     c.vehicle_id == car_id
                                     select c.vehicle_id).ToList();
                     Console.WriteLine(isBooked);
@@ -147,7 +149,17 @@ namespace AutoMilestoneV2.Controllers.Customer
             {
                 return Json("error", JsonRequestBehavior.AllowGet);
             }
-            return Json("success", JsonRequestBehavior.AllowGet);
+            CustomerResponse cs = new CustomerResponse();
+            cs.response = "success";
+            cs.distance = distance;
+            cs.price = price;
+            cs.message = "Thank you for using our services. Our staff will be in contact with you soon.";
+
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            var json = js.Serialize(cs);
+            
+            return Json(json, JsonRequestBehavior.AllowGet);
         }
     }
 }

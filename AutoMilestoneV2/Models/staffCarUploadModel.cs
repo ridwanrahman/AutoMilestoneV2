@@ -56,4 +56,12 @@ namespace AutoMilestoneV2.Models
         public string longitude { get; set; }
         public string latitude { get; set; }
     }
+
+    public class CustomerResponse
+    {
+        public String response { get; set; }
+        public Double distance { get; set; }
+        public Double price { get; set; }
+        public String message { get; set; }
+    }
 }

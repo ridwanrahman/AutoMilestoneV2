@@ -134,13 +134,13 @@ namespace AutoMilestoneV2.Models
     {
         [Key]
         public int Id { get; set; }
-        [Display(Name ="Email Address")]
-        [Required]
+        [Display(Name ="Email Address")]        
         public string messageTo { get; set; }
         [Display(Name ="Subject")]
         [Required]
         public string messageSubject { get; set; }
         [Display(Name ="Message")]
+        [AllowHtml]
         [Required]
         public string messageBody { get; set; }
         [Display(Name ="File")]

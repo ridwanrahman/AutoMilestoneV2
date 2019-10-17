@@ -102,13 +102,18 @@ namespace AutoMilestoneV2.Controllers.Admin
         
         public ActionResult SendBulkEmail()
         {
+            using (var context = new Entities3())
+            {
+                var req = (from u in context.AspNetUsers select u.Email).ToList();
+                ViewBag.emails = req;
+            }
             return View();
         }
 
         [HttpPost]
         public ActionResult SendBulkEmail(BulkEmailViewModel emailMessage)
         {
-            if (emailMessage.messageTo == null || emailMessage.messageSubject == null ||
+            if (emailMessage.messageSubject == null ||
                 emailMessage.messageBody == null)
             {
                 ViewBag.Result = "error";
@@ -118,7 +123,16 @@ namespace AutoMilestoneV2.Controllers.Admin
             {
                 try
                 {
-                    String to = emailMessage.messageTo;
+                    String to = "";
+                    using (var context = new Entities3())
+                    {
+                        var req = (from u in context.AspNetUsers select u.Email).ToList();
+                        to = req[0];
+                        for(int i=1;i<req.Count();i++)
+                        {
+                            to = to + "," + req[i];
+                        }
+                    }
                     String messageSubject = emailMessage.messageSubject;
                     String messageBody = emailMessage.messageBody;
                     BulkEmailSenderClass bs = new BulkEmailSenderClass();

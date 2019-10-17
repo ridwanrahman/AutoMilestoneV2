@@ -11,7 +11,8 @@ namespace AutoMilestoneV2.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Vehicle
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,13 +21,15 @@ namespace AutoMilestoneV2.Models
             this.CustomerBookings = new HashSet<CustomerBooking>();
         }
     
-        public int Id { get; set; }        
+        public int Id { get; set; }
+        [Display(Name = "Name of car")]
         public string Name { get; set; }
         public string Model { get; set; }
         public string userId { get; set; }
+        [Display(Name = "Image (Feature not implemented)")]
         public string image_path { get; set; }
+        [Display(Name="Vehicle Description")]
         public string vehicle_description { get; set; }
-    
         public virtual AspNetUser AspNetUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerBooking> CustomerBookings { get; set; }
