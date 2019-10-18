@@ -12,6 +12,7 @@ using AutoMilestoneV2.Controllers;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Newtonsoft.Json;
 using System.IO;
+using Ganss.XSS;
 
 namespace AutoMilestoneV2.Controllers.Admin
 {
@@ -73,9 +74,16 @@ namespace AutoMilestoneV2.Controllers.Admin
             {
                 try
                 {
+                    var sanitizer = new HtmlSanitizer();
+
+                    //var html = @"" + emailMessage.messageBody + "";
+                    emailMessage.messageBody = @"<p><script>alert('xss')</script>dell</p>";
                     String to = emailMessage.messageTo;
                     String messageSubject = emailMessage.messageSubject;
                     String messageBody = emailMessage.messageBody;
+
+                    var sanitized = sanitizer.Sanitize(messageBody);
+
                     EmailSenderClass es = new EmailSenderClass();
                     if(emailMessage.attachment != null)
                     {

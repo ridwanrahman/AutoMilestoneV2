@@ -16,9 +16,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-
-
-
 <style>
     body {
         margin: 0;
@@ -117,8 +114,6 @@
             </div>
         </div>
     </div>
-
-
 
     <br />
     <br />
@@ -257,7 +252,6 @@
 
                 map.on('click', function (e) {
                     var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
-                    console.log("herere");
                     // Remove the linestring from the group
                     // So we can redraw it based on the points collection
                     if (geojson.features.length > 1) geojson.features.pop();
@@ -282,11 +276,9 @@
                             }
                         };
                         locations.push(point['geometry']['coordinates']);
-                        console.log(locations);
                         geojson.features.push(point);
                     }
                     if (geojson.features.length > 1) {
-
                         linestring.geometry.coordinates = geojson.features.map(function (point) {
                             return point.geometry.coordinates;
                         });
@@ -322,7 +314,6 @@
                 if (date_from.length > 0 && date_to.length > 0 && car_id > 0) {
                     var dates = car_id + "," + date_from + "," + date_to;
                     spinner.css({ "display": "block" });
-                    console.log("have both dates");
                     $.ajax({
                         type: "POST",
                         dataType: 'text',
@@ -373,7 +364,6 @@
                 $.fn.myFunction();
             });
             $("#close2").click(function () {
-                alert("pressed");
                 location.reload();
             })
 
