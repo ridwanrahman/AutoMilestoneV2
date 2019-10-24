@@ -152,4 +152,10 @@ namespace AutoMilestoneV2.Models
         public double distance { get; set; }
         public double price { get; set; }
     }
+
+    public class AdminAnalyticsUserAmount
+    {
+        public int staffNumber { get; set; }
+        public int customerNumber { get; set; }
+    }
 }

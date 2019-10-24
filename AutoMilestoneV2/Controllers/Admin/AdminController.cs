@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Newtonsoft.Json;
 using System.IO;
 using Ganss.XSS;
+using System.Web.Script.Serialization;
 
 namespace AutoMilestoneV2.Controllers.Admin
 {
@@ -59,6 +60,27 @@ namespace AutoMilestoneV2.Controllers.Admin
         public ActionResult SendEmail()
         {
             return View();
+        }
+
+        [AllowAnonymous]
+        public JsonResult ShowAnalytics()
+        {
+            AdminAnalyticsUserAmount userAnalytics = new AdminAnalyticsUserAmount();
+            using (var context = new Entities3())
+            {
+                string num = "2";
+                string num2 = "3";
+                //select * from AspNetUsers u join userrolesbridging roles on u.Id=roles.UserId where roles.RoleId=3;
+                userAnalytics.customerNumber  = (from u in context.AspNetUsers join roles in context.userrolesbridgings
+                                     on u.Id equals roles.UserId where roles.RoleId == num2 select u.Id).ToList().Count();
+                userAnalytics.staffNumber = (from u in context.AspNetUsers join roles in context.userrolesbridgings on u.Id equals roles.UserId
+                                     where roles.RoleId == num select u.Id).ToList().Count();
+            }
+
+            Console.WriteLine(userAnalytics);
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            var json = js.Serialize(userAnalytics);
+            return Json(json, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

@@ -6,5 +6,43 @@
 
 <h2>Admin dashboard</h2>
 
+<div id="piechart"></div>
+
+
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            dataType: 'text',
+            contentType: "application/json; charset=utf-8",
+            data: "",
+            url: "/admin/ShowAnalytics",
+            success: function (result) {
+                var str = jQuery.parseJSON(result);
+                var str2 = jQuery.parseJSON(str);
+                google.charts.load('current', { 'packages': ['corechart'] });
+                google.charts.setOnLoadCallback(drawChart);
+                // Draw the chart and set the chart values
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Task', 'Hours per Day'],
+                        ['Staff', str2.staffNumber],
+                        ['Customer', str2.customerNumber],
+                    ]);
+                    // Optional; add a title and set the width and height of the chart
+                    var options = { 'title': 'All Users', 'width': 550, 'height': 400 };
+                    // Display the chart inside the <div> element with id="piechart"
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                    chart.draw(data, options);
+                }
+            }
+        })
+    })
+</script>
 
 
