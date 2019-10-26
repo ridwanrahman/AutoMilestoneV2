@@ -10,19 +10,21 @@ using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+// This is the customer controller. It takes care of the customer dashboard
 namespace AutoMilestoneV2.Controllers.Customer
 {
     [Authorize(Roles = "Customer")]
     [RequireHttps]
     public class CustomerController : Controller
     {
-        
+        // This loads the index page
         public ActionResult Index2()
         {
             return View();
         }
         [Authorize(Roles = "Customer")]
         // GET: Customer
+        // This controller loads the index page with data from the database.
         public ActionResult Index()
         {
             
@@ -33,7 +35,11 @@ namespace AutoMilestoneV2.Controllers.Customer
             }
             return View();
         }
-
+        // This controller handles the booking functionality.
+        // When a user selects a car and selects from and to dates, through the use of ajax,
+        // this function is called. This function checks the database by running a linq command
+        // to check if the same car is already booked on the given dates or not. It then sends
+        // a json response accordingly. The reponse determines if the user can create booking or not
         [AllowAnonymous]
         [HttpPost]
         public JsonResult CheckBookingDate(string inputDates)
@@ -50,13 +56,9 @@ namespace AutoMilestoneV2.Controllers.Customer
             DateTime date_to_date = Convert.ToDateTime(date_to_converted);
             using(var context = new Entities3())
             {
-                /*var isBooked = (from c in context.CustomerBookings where 
-                                (c.from_date >= date_from_date and c.<=date_to_date) or 
-                                c.to_date <= date_to_date && c.vehicle_id == car_id
-                                select c.customer_booking_id).ToList(); */
-
                 try
                 {
+                    // Linq command where my booking constraint is implemented
                     var isBooked = (from c in context.CustomerBookings
                                     where ((c.from_date >= date_from_date && c.from_date <= date_to_date) ||
                                             (c.to_date >= date_to_date && c.to_date <= date_to_date) ||
@@ -81,6 +83,7 @@ namespace AutoMilestoneV2.Controllers.Customer
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
+        // This is the controller which creates the booking for a customer.
         [AllowAnonymous]
         [HttpPost]
         public JsonResult CreateBooking(string sendInfo)
@@ -101,12 +104,6 @@ namespace AutoMilestoneV2.Controllers.Customer
             {
                 Console.WriteLine(result);
             }
-            //date_from = result[0].Trim('\t', '[','"');
-            //date_to = result[1].Trim('\t', '[', '"');
-
-            //convert to date time type
-            //DateTime date_from_dateType = Convert.ToDateTime(result[0].Trim('\t', '[', '"'));
-            //DateTime date_to_dateType = Convert.ToDateTime(result[1].Trim('\t', '[', '"'));
 
             DateTime date_from = Convert.ToDateTime(result[0].Trim('\t', '[', '"'));
             DateTime date_to = Convert.ToDateTime(result[1].Trim('\t', '[', '"'));
@@ -114,8 +111,6 @@ namespace AutoMilestoneV2.Controllers.Customer
             var date_to_converted = date_to.ToString("yyyy-MM-dd");
             DateTime date_from_date = Convert.ToDateTime(date_from_converted);
             DateTime date_to_date = Convert.ToDateTime(date_to_converted);
-
-
 
             car_id = result[2].Trim('\t', '[', '"');
             var abc = result[3].Trim('\t', '[', '"');
@@ -126,6 +121,7 @@ namespace AutoMilestoneV2.Controllers.Customer
             {
                 using (var context = new Entities3())
                 {
+                    // this SQL command is executed to insert the booking into the database
                     context.Database.ExecuteSqlCommand("insert into " +
                         "[dbo].[CustomerBooking]([userId],[vehicle_id]," +
                         "[isAccepted],[to_date],[from_date],[pickup_location],[dropoff_location],[distance],[price]) " +
@@ -154,7 +150,6 @@ namespace AutoMilestoneV2.Controllers.Customer
             cs.distance = distance;
             cs.price = price;
             cs.message = "Thank you for using our services. Our staff will be in contact with you soon.";
-
 
             JavaScriptSerializer js = new JavaScriptSerializer();
             var json = js.Serialize(cs);

@@ -40,6 +40,18 @@
                     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
                     chart.draw(data, options);
                 }
+
+                //Second ajax call
+                $.ajax({
+                    type: "POST",
+                    dataType: 'text',
+                    contentType: "application/json; charset=utf-8",
+                    data: "",
+                    url: "/admin/VehicleAnalytics",
+                    success: function (result) {
+                        //alert("vehic analy");
+                    }
+                })
             }
         })
     })

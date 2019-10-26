@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using AutoMilestoneV2.Models;
 using Microsoft.AspNet.Identity;
 
+// This is the controller which takes care of all the staff functionalities.
 
 namespace AutoMilestoneV2.Controllers.Staff
 {
@@ -16,11 +17,11 @@ namespace AutoMilestoneV2.Controllers.Staff
         // GET: Staff
         public ActionResult Index()
         {
+            // gets the current user
             string userId = User.Identity.GetUserId();
             using (var context = new Entities3())
             {
-                //select u.Id,u.Email, c.customer_booking_id, c.from_date, c.to_date, c.vehicle_id 
-                // from AspNetUsers u join CustomerBooking c on u.Id = c.userId
+                // collects all the staff data and puts them inside ViewBag.
                 var viewModel = (from u in context.AspNetUsers join c in context.CustomerBookings
                                  on u.Id equals c.userId
                                  select new StaffViewCustomerBookingInDashboard() { Id=u.Id, Email=u.Email,
@@ -50,6 +51,7 @@ namespace AutoMilestoneV2.Controllers.Staff
             {
                 using(Entities3 db = new Entities3())
                 {
+                    // This sql command inserts a vehicle into the database.
                     db.Database.ExecuteSqlCommand("insert into [dbo].[Vehicle] ([Name],[Model],[userId],[image_path]) Values ('"+newUpload.name+"', '"+newUpload.model+"', '"+userId+"', '"+ fullPath + "');");
                 }
                 newUpload.carPicture.SaveAs(fullPath);
@@ -80,6 +82,7 @@ namespace AutoMilestoneV2.Controllers.Staff
         {
             using (var context = new Entities3())
             {
+                // for implementing the functionality of staff member checking booking details
                 var customerDetails = (from u in context.AspNetUsers
                                    where u.Id == query
                                    select new CustomerModel() { Id=u.Id, Email=u.Email}).ToArray();

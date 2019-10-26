@@ -80,6 +80,8 @@
           <Property Name="from_date" Type="datetime" Nullable="false" />
           <Property Name="pickup_location" Type="nvarchar(max)" />
           <Property Name="dropoff_location" Type="nvarchar(max)" />
+          <Property Name="distance" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="price" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="CustomerBookingLocation">
           <Key>
@@ -521,6 +523,8 @@
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK__CustomerB__userI__628FA481" FromRole="CustomerBooking" ToRole="AspNetUser" />
           <NavigationProperty Name="Vehicle" Relationship="Model.FK__CustomerB__vehic__6477ECF3" FromRole="CustomerBooking" ToRole="Vehicle" />
           <NavigationProperty Name="CustomerBookingLocations" Relationship="Model.FK__CustomerB__custo__04E4BC85" FromRole="CustomerBooking" ToRole="CustomerBookingLocation" />
+          <Property Name="distance" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="price" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <Association Name="FK__CustomerB__userI__628FA481">
           <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
@@ -664,6 +668,8 @@
           <EntitySetMapping Name="CustomerBookings">
             <EntityTypeMapping TypeName="Model.CustomerBooking">
               <MappingFragment StoreEntitySet="CustomerBooking">
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="distance" ColumnName="distance" />
                 <ScalarProperty Name="dropoff_location" ColumnName="dropoff_location" />
                 <ScalarProperty Name="pickup_location" ColumnName="pickup_location" />
                 <ScalarProperty Name="from_date" ColumnName="from_date" />

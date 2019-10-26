@@ -34,7 +34,5 @@ namespace AutoMilestoneV2.Models
         public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<CustomerBooking> CustomerBookings { get; set; }
         public virtual DbSet<CustomerBookingLocation> CustomerBookingLocations { get; set; }
-
-        public System.Data.Entity.DbSet<AutoMilestoneV2.Models.EmailViewModel> EmailViewModels { get; set; }
     }
 }

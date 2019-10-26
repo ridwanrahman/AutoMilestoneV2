@@ -6,17 +6,23 @@ using System.Web.Mvc;
 using AutoMilestoneV2.Models;
 using Microsoft.AspNet.Identity;
 
+// This is the main home controller which takes care of loading up the homepage.
+
 namespace AutoMilestoneV2.Controllers
 {
     public class HomeController : Controller
     {
         public ActionResult Index()
         {
+            // checks if the user is authenticated
             if(User.Identity.IsAuthenticated)
             {
+                //gets the current user
                 string currentUserId = User.Identity.GetUserId();
                 using (var context = new Entities3())
                 {
+                    // finds the role of the user. This is done to show specific navigation bar
+                    // to specific roles of users.
                     var result = (from u in context.AspNetUsers
                                   join ur in context.userrolesbridgings on u.Id equals ur.UserId
                                   join ro in context.AspNetRoles on

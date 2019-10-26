@@ -15,23 +15,28 @@ using System.IO;
 using Ganss.XSS;
 using System.Web.Script.Serialization;
 
+// This is the admin controller
 namespace AutoMilestoneV2.Controllers.Admin
 {
     [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {        
         // GET: Admin
+        // This controller just loads up the index page.
         public ActionResult Index()
         {
             return View();
         }
-        
+        // This controller shows the add staff page where the admin can add staff members.
         public ActionResult AddStaff()
         {
             ViewBag.Message = "hi";
             return View();
         }
 
+        // This is the function that is called when the staff page is submitted with the
+        // staff username and password. It manipulates the database and executes a sql statement
+        // to save the staff member to the database. Then sends a succcess message to the page.
         [HttpPost]
         public ActionResult AddStaff(RegisterViewModel newModel)
         {
@@ -42,8 +47,10 @@ namespace AutoMilestoneV2.Controllers.Admin
             IdentityResult result = manager.Create(user, newModel.Password);
             try
             {
+                // traversing the database
                 using (Entities3 db = new Entities3())
                 {
+                    // executing SQL comman
                     db.Database.ExecuteSqlCommand("insert into [dbo].[userrolesbridging]([UserId], [RoleId]) values ('" + user.Id + "',2);");
                 }
                 ModelState.Clear();
@@ -56,11 +63,15 @@ namespace AutoMilestoneV2.Controllers.Admin
                 return View();
             }
         }
-
+        // This controller opens the email page
         public ActionResult SendEmail()
         {
             return View();
         }
+        // This controller reads the database to find the number of staff members and customers
+        // then sends it to the front end of the site which uses ajax to call this controller
+        // The data from this controller is used to generate a chart to show the number of staff
+        // and customer active in the database.
 
         [AllowAnonymous]
         public JsonResult ShowAnalytics()
@@ -70,19 +81,52 @@ namespace AutoMilestoneV2.Controllers.Admin
             {
                 string num = "2";
                 string num2 = "3";
-                //select * from AspNetUsers u join userrolesbridging roles on u.Id=roles.UserId where roles.RoleId=3;
+                // Linq statement to find data for analytics
                 userAnalytics.customerNumber  = (from u in context.AspNetUsers join roles in context.userrolesbridgings
                                      on u.Id equals roles.UserId where roles.RoleId == num2 select u.Id).ToList().Count();
                 userAnalytics.staffNumber = (from u in context.AspNetUsers join roles in context.userrolesbridgings on u.Id equals roles.UserId
                                      where roles.RoleId == num select u.Id).ToList().Count();
             }
-
-            Console.WriteLine(userAnalytics);
+            // serializing the object to make it easier to send it by json response
             JavaScriptSerializer js = new JavaScriptSerializer();
             var json = js.Serialize(userAnalytics);
             return Json(json, JsonRequestBehavior.AllowGet);
         }
 
+        // This controller was written to find number of vehicles present in the database
+        // and how much distance they have travelled.
+        [AllowAnonymous]
+
+        public JsonResult VehicleAnalytics()
+        {
+            /*
+            using (var context = new Entities3())
+            {
+                //AdminAnalyticsVehicle vehicleAnalytics = new AdminAnalyticsVehicle();
+                List<AdminAnalyticsVehicle> vehicleList = new List<AdminAnalyticsVehicle>();
+                var req = (from v in context.Vehicles select v.Id).ToList();
+                foreach (int i in req)
+                {
+                    vehicleAnalytics.vehicle_id = i;
+                    Console.WriteLine(i);
+                    int counter = 0;
+                    var eachCar = (from c in context.CustomerBookings
+                                   where c.vehicle_id == i
+                                   select c.distance).ToList();
+                    foreach (int j in eachCar)
+                    {
+                        counter = counter + j;
+                    }
+                    vehicleAnalytics.distance = counter;
+                }
+                Console.WriteLine(vehicleAnalytics);
+            }
+            */
+            return null;
+        }
+
+        // This controller deals with sending email. It takes the email address, subject, message
+        // and an optional file field and sends it to the email address provided.
         [HttpPost]
         public ActionResult SendEmail(EmailViewModel emailMessage)
         {
@@ -129,7 +173,8 @@ namespace AutoMilestoneV2.Controllers.Admin
                 return View();
             }
         }
-        
+        // This controller opens the bulk email page
+
         public ActionResult SendBulkEmail()
         {
             using (var context = new Entities3())
@@ -139,7 +184,8 @@ namespace AutoMilestoneV2.Controllers.Admin
             }
             return View();
         }
-
+        // This is the function which takes care of the bulk email feature. It reads the user
+        // database and sends emails to all the email addresses present.
         [HttpPost]
         public ActionResult SendBulkEmail(BulkEmailViewModel emailMessage)
         {

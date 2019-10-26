@@ -6,6 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
+// This is the email sending class. It has the API key and will send email to specific user 
+// when called
+
 namespace AutoMilestoneV2.Controllers.Admin
 {
     public class EmailSenderClass

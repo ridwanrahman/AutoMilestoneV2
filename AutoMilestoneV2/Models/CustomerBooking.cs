@@ -28,6 +28,8 @@ namespace AutoMilestoneV2.Models
         public System.DateTime from_date { get; set; }
         public string pickup_location { get; set; }
         public string dropoff_location { get; set; }
+        public Nullable<decimal> distance { get; set; }
+        public Nullable<decimal> price { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual Vehicle Vehicle { get; set; }

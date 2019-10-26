@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+//This is the main bulk email sending class. It has the api key and will send teh email when 
+// the send function is called
+
 namespace AutoMilestoneV2.Controllers.Admin
 {
     public class BulkEmailSenderClass

@@ -158,4 +158,10 @@ namespace AutoMilestoneV2.Models
         public int staffNumber { get; set; }
         public int customerNumber { get; set; }
     }
+
+    public class AdminAnalyticsVehicle
+    {
+        public int vehicle_id { get; set; }
+        public double distance { get; set; }
+    }
 }
